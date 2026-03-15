@@ -38,11 +38,10 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;
 .burger:hover{border-color:var(--dim)}
 .burger span{display:block;width:16px;height:1.5px;background:var(--ink);border-radius:1px;transition:background .25s}
 
-/* TABS — full width, bigger */
-.tabs{border-bottom:0.5px solid var(--line);background:var(--bg);transition:background .25s,border-color .25s;flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tabs-i{width:100%;padding:0 48px;display:flex}
-.tab{font-family:'Saira Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:2px;padding:13px 22px;cursor:pointer;color:var(--faint);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .15s;text-transform:uppercase;white-space:nowrap}
+/* TABS — equal width, centered, not overwhelming */
+.tabs{border-bottom:0.5px solid var(--line);background:var(--bg);transition:background .25s,border-color .25s;flex-shrink:0}
+.tabs-i{width:100%;display:flex}
+.tab{font-family:'Saira Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:2px;flex:1;text-align:center;padding:14px 8px;cursor:pointer;color:var(--faint);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .15s;text-transform:uppercase;white-space:nowrap}
 .tab.on{color:var(--red);border-bottom-color:var(--red)}
 .tab:hover:not(.on){color:var(--ink)}
 
@@ -164,7 +163,7 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;
 
 /* RESPONSIVE */
 @media(max-width:1199px){
-  .ti,.tabs-i,.foot-i,.results-wrap{padding-left:32px;padding-right:32px}
+  .ti,.foot-i,.results-wrap{padding-left:32px;padding-right:32px}
   .wrap{padding:0 32px}
   .two-col{gap:48px}
   .nr-body{gap:40px}
@@ -173,26 +172,58 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;
   .burger{display:flex}
   .tabs{display:none}
   .ti{padding:0 16px;height:48px}
-  .zone{align-items:flex-start;overflow-y:auto}
-  .wrap{padding:20px 16px}
-  .two-col{grid-template-columns:1fr;gap:20px}
-  .nr-body{grid-template-columns:1fr;gap:20px}
-  .nr-header{margin-bottom:20px}
-  .hero-num{font-size:clamp(56px,16vw,80px)}
-  .hero-sub{max-width:100%;font-size:14px}
-  .mn{font-size:clamp(28px,7vw,40px)}
-  .mv{font-size:clamp(18px,5vw,26px)}
+  /* No overflow on any panel except results */
+  .zone{align-items:flex-start;overflow:hidden}
+  .panel.on:not(#hist){display:flex;overflow:hidden}
+  .wrap{padding:16px}
+  .two-col{grid-template-columns:1fr;gap:12px}
+  .nr-body{grid-template-columns:1fr;gap:12px}
+  .nr-header{margin-bottom:12px;text-align:center}
+  /* Compress hero */
+  .hero-eye{font-size:10px;margin-bottom:4px}
+  .hero-num{font-size:clamp(44px,13vw,64px);line-height:.88}
+  .hero-sub{max-width:100%;font-size:13px;margin-top:8px;line-height:1.5}
+  /* Compress podium list */
+  .mrow{padding:10px 0}
+  .mn{font-size:clamp(22px,6vw,32px)}
+  .mteam{font-size:11px;margin-top:2px}
+  .mv{font-size:clamp(16px,4vw,22px)}
+  .mv small{font-size:10px}
+  .rest{font-size:13px;padding-top:8px;line-height:1.7}
+  /* Compress next race */
+  .nr-name{font-size:clamp(28px,8vw,44px)}
+  .nr-meta{font-size:11px;margin-top:4px}
+  .cd-label,.facts-label{font-size:10px;margin-bottom:8px}
   .cd-blocks{gap:5px}
-  .cd-n{font-size:clamp(28px,8vw,44px)}
+  .cd-block{padding:10px 4px 8px}
+  .cd-n{font-size:clamp(24px,7vw,38px)}
+  .cd-l{font-size:9px;margin-top:3px}
   .facts{gap:6px}
-  .fv{font-size:18px}
-  .results-wrap{padding:16px}
-  .foot-i{padding:10px 16px}
+  .fv{font-size:16px}
+  .fl{font-size:10px}
+  /* Compress standings */
+  .leader-box{padding:16px}
+  .leader-name{font-size:clamp(36px,10vw,52px)}
+  .leader-team{font-size:13px;margin-top:6px}
+  .leader-pts{font-size:clamp(32px,9vw,44px);margin-top:6px}
+  .leader-pts span{font-size:18px}
+  .sitem{padding:8px 0}
+  .sn{font-size:clamp(18px,5vw,24px)}
+  .st{font-size:11px}
+  .sp{font-size:clamp(20px,5vw,26px)}
+  .sl{font-size:9px}
+  .sg{font-size:10px}
+  /* Results — allow scroll */
+  .results-zone{overflow-y:auto}
+  .results-wrap{padding:12px 16px}
+  .hgp{font-size:16px}
+  .hdate{font-size:11px}
+  .hwinner{font-size:15px}
+  /* Footer/misc */
+  .foot-i{padding:8px 16px}
   .cbubble{right:-8px;width:220px}
-  .leader-pts{font-size:clamp(36px,10vw,52px)}
-  .leader-name{font-size:clamp(40px,10vw,60px)}
-  .sn{font-size:clamp(20px,5vw,26px)}
-  .sp{font-size:clamp(22px,5vw,30px)}
+  .ticker-wrap{height:24px}
+  .tick{font-size:10px}
 }
 </style>
 </head>

@@ -1,0 +1,177 @@
+// fetch-results.js
+// Run by GitHub Actions ~20 min after each race
+// Fetches result from OpenF1, generates commentary via Groq, updates races.json
+
+const fs = require('fs');
+const https = require('https');
+
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
+const CALENDAR = [
+  { round:1,  name:'Australian GP',   circuit:'Albert Park',                   date:'8 Mar 2026',   raceUtc:'2026-03-08T04:00:00Z', location:'Melbourne' },
+  { round:2,  name:'Chinese GP',      circuit:'Shanghai',                      date:'15 Mar 2026',  raceUtc:'2026-03-15T07:00:00Z', location:'Shanghai' },
+  { round:3,  name:'Japanese GP',     circuit:'Suzuka Circuit',                date:'29 Mar 2026',  raceUtc:'2026-03-29T05:00:00Z', location:'Suzuka' },
+  { round:4,  name:'Bahrain GP',      circuit:'Bahrain International Circuit', date:'12 Apr 2026',  raceUtc:'2026-04-12T15:00:00Z', location:'Sakhir' },
+  { round:5,  name:'Saudi GP',        circuit:'Jeddah Corniche Circuit',       date:'19 Apr 2026',  raceUtc:'2026-04-19T17:00:00Z', location:'Jeddah' },
+  { round:6,  name:'Miami GP',        circuit:'Miami International Autodrome', date:'3 May 2026',   raceUtc:'2026-05-03T20:00:00Z', location:'Miami' },
+  { round:7,  name:'Canadian GP',     circuit:'Circuit Gilles Villeneuve',     date:'24 May 2026',  raceUtc:'2026-05-24T18:00:00Z', location:'Montreal' },
+  { round:8,  name:'Monaco GP',       circuit:'Circuit de Monaco',             date:'7 Jun 2026',   raceUtc:'2026-06-07T13:00:00Z', location:'Monaco' },
+  { round:9,  name:'Barcelona GP',    circuit:'Circuit de Barcelona-Catalunya',date:'14 Jun 2026',  raceUtc:'2026-06-14T13:00:00Z', location:'Barcelona' },
+  { round:10, name:'Austrian GP',     circuit:'Red Bull Ring',                 date:'28 Jun 2026',  raceUtc:'2026-06-28T13:00:00Z', location:'Spielberg' },
+  { round:11, name:'British GP',      circuit:'Silverstone Circuit',           date:'5 Jul 2026',   raceUtc:'2026-07-05T14:00:00Z', location:'Silverstone' },
+  { round:12, name:'Belgian GP',      circuit:'Circuit de Spa-Francorchamps', date:'19 Jul 2026',  raceUtc:'2026-07-19T13:00:00Z', location:'Spa' },
+  { round:13, name:'Hungarian GP',    circuit:'Hungaroring',                   date:'26 Jul 2026',  raceUtc:'2026-07-26T13:00:00Z', location:'Budapest' },
+  { round:14, name:'Dutch GP',        circuit:'Circuit Zandvoort',             date:'23 Aug 2026',  raceUtc:'2026-08-23T13:00:00Z', location:'Zandvoort' },
+  { round:15, name:'Italian GP',      circuit:'Autodromo Nazionale Monza',     date:'6 Sep 2026',   raceUtc:'2026-09-06T13:00:00Z', location:'Monza' },
+  { round:16, name:'Madrid GP',       circuit:'IFEMA Madrid Circuit',          date:'13 Sep 2026',  raceUtc:'2026-09-13T13:00:00Z', location:'Madrid' },
+  { round:17, name:'Azerbaijan GP',   circuit:'Baku City Circuit',             date:'26 Sep 2026',  raceUtc:'2026-09-26T11:00:00Z', location:'Baku' },
+  { round:18, name:'Singapore GP',    circuit:'Marina Bay Street Circuit',     date:'11 Oct 2026',  raceUtc:'2026-10-11T12:00:00Z', location:'Singapore' },
+  { round:19, name:'US GP',           circuit:'Circuit of the Americas',       date:'25 Oct 2026',  raceUtc:'2026-10-25T19:00:00Z', location:'Austin' },
+  { round:20, name:'Mexico GP',       circuit:'Autodromo Hermanos Rodriguez',  date:'1 Nov 2026',   raceUtc:'2026-11-01T20:00:00Z', location:'Mexico City' },
+  { round:21, name:'São Paulo GP',    circuit:'Autodromo Jose Carlos Pace',    date:'8 Nov 2026',   raceUtc:'2026-11-08T18:00:00Z', location:'Interlagos' },
+  { round:22, name:'Las Vegas GP',    circuit:'Las Vegas Strip Circuit',       date:'21 Nov 2026',  raceUtc:'2026-11-22T06:00:00Z', location:'Las Vegas' },
+  { round:23, name:'Qatar GP',        circuit:'Lusail International Circuit',  date:'29 Nov 2026',  raceUtc:'2026-11-29T17:00:00Z', location:'Lusail' },
+  { round:24, name:'Abu Dhabi GP',    circuit:'Yas Marina Circuit',            date:'6 Dec 2026',   raceUtc:'2026-12-06T13:00:00Z', location:'Abu Dhabi' },
+];
+
+function get(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, { headers: { 'User-Agent': 'f1pit-bot/1.0' } }, res => {
+      let data = '';
+      res.on('data', d => data += d);
+      res.on('end', () => { try { resolve(JSON.parse(data)); } catch(e) { reject(new Error('Parse failed: ' + data.slice(0,200))); } });
+    }).on('error', reject);
+  });
+}
+
+function post(url, payload, headers) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify(payload);
+    const req = https.request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body), ...headers }
+    }, res => {
+      let data = '';
+      res.on('data', d => data += d);
+      res.on('end', () => { try { resolve(JSON.parse(data)); } catch(e) { reject(new Error('Parse failed')); } });
+    });
+    req.on('error', reject);
+    req.write(body); req.end();
+  });
+}
+
+async function getLatestSession() {
+  const sessions = await get('https://api.openf1.org/v1/sessions?session_type=Race&year=2026');
+  if (!sessions || !sessions.length) throw new Error('No sessions found');
+  return sessions[sessions.length - 1];
+}
+
+async function getRaceResult(sessionKey) {
+  const [positions, drivers] = await Promise.all([
+    get(`https://api.openf1.org/v1/position?session_key=${sessionKey}`),
+    get(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`),
+  ]);
+
+  const driverMap = {};
+  drivers.forEach(d => { driverMap[d.driver_number] = { name: d.last_name || d.full_name, team: d.team_name }; });
+
+  const finalPos = {};
+  positions.forEach(p => { finalPos[p.driver_number] = p.position; });
+
+  const sorted = Object.entries(finalPos)
+    .map(([num, pos]) => ({ ...driverMap[num], position: pos, num }))
+    .filter(d => d.name)
+    .sort((a, b) => a.position - b.position);
+
+  const finishedNums = new Set(Object.keys(finalPos));
+  const dnfNames = drivers
+    .filter(d => !finishedNums.has(String(d.driver_number)))
+    .map(d => d.last_name || d.full_name)
+    .filter(Boolean);
+
+  const rest = sorted.slice(3, 8).map((d, i) => `${i + 4}. ${d.name}`).join(' · ')
+    + (dnfNames.length ? ` · DNF: ${dnfNames.join(', ')}` : '');
+
+  return { p1: sorted[0], p2: sorted[1], p3: sorted[2], rest };
+}
+
+async function generateCommentary(raceName, p1, p2, p3, rest) {
+  if (!GROQ_API_KEY) {
+    console.log('No GROQ_API_KEY — using fallback commentary');
+    return {
+      note: `${p1.name} took the win in the ${raceName} ahead of ${p2.name} and ${p3.name}.`,
+      egg: null
+    };
+  }
+  const prompt = `You are a razor-sharp, witty F1 journalist. Write two things about this race:
+
+Race: ${raceName}
+Winner: ${p1.name} (${p1.team})
+P2: ${p2.name} (${p2.team})
+P3: ${p3.name} (${p3.team})
+Rest: ${rest}
+
+Return ONLY valid JSON, no preamble, no markdown:
+{
+  "note": "2-3 sentence factual summary with personality. Mention what was notable or surprising. Max 200 chars.",
+  "egg": "One punchy witty one-liner a sharp F1 pundit would say in a pub. Max 90 chars. No emojis."
+}`;
+
+  try {
+    const res = await post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      { model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], max_tokens: 220, temperature: 0.85 },
+      { Authorization: `Bearer ${GROQ_API_KEY}` }
+    );
+    const text = res.choices[0].message.content.trim().replace(/```json|```/g, '');
+    return JSON.parse(text);
+  } catch(e) {
+    console.error('Groq error:', e.message);
+    return { note: `${p1.name} won the ${raceName} ahead of ${p2.name} and ${p3.name}.`, egg: null };
+  }
+}
+
+async function main() {
+  console.log('F1Pit update starting...');
+
+  let races = [];
+  try { races = JSON.parse(fs.readFileSync('races.json', 'utf8')); } catch(e) { console.log('Starting fresh'); }
+
+  const session = await getLatestSession();
+  console.log(`Session: ${session.session_name}, key: ${session.session_key}, location: ${session.location}`);
+
+  const calRace = CALENDAR.find(c =>
+    session.location && c.location.toLowerCase().includes(session.location.toLowerCase().split(',')[0].toLowerCase())
+  ) || CALENDAR[races.length];
+
+  if (!calRace) { console.log('Cannot map to calendar. Exiting.'); process.exit(0); }
+
+  if (races.find(r => r.round === calRace.round)) {
+    console.log(`Round ${calRace.round} (${calRace.name}) already saved. Nothing to do.`);
+    process.exit(0);
+  }
+
+  const result = await getRaceResult(session.session_key);
+  console.log(`Winner: ${result.p1?.name}`);
+
+  const commentary = await generateCommentary(calRace.name, result.p1, result.p2, result.p3, result.rest);
+  console.log('Commentary:', commentary.note);
+
+  races.push({
+    round: calRace.round,
+    name: calRace.name,
+    circuit: calRace.circuit,
+    date: calRace.date,
+    p1: { name: result.p1.name, team: result.p1.team },
+    p2: { name: result.p2.name, team: result.p2.team, delta: result.p2.delta || '' },
+    p3: { name: result.p3.name, team: result.p3.team, delta: result.p3.delta || '' },
+    rest: result.rest,
+    note: commentary.note,
+    egg: commentary.egg
+  });
+
+  fs.writeFileSync('races.json', JSON.stringify(races, null, 2));
+  console.log(`Done. ${races.length} races saved.`);
+}
+
+main().catch(e => { console.error('Fatal:', e); process.exit(1); });

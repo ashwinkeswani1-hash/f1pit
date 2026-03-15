@@ -1,0 +1,26 @@
+[
+  {
+    "round": 1,
+    "name": "Australian GP",
+    "circuit": "Albert Park",
+    "date": "8 Mar 2026",
+    "p1": { "name": "Russell", "team": "Mercedes" },
+    "p2": { "name": "Leclerc", "team": "Ferrari", "delta": "+3.4s" },
+    "p3": { "name": "Antonelli", "team": "Mercedes", "delta": "+7.1s" },
+    "rest": "4. Norris · 5. Verstappen · 6. Hamilton · DNF: Bearman (brakes)",
+    "note": "Russell opened 2026 from pole. Leclerc split the Mercedes. Hamilton P6 — still finding his feet in red.",
+    "egg": "Back-to-back poles to open the season. George Russell is in a different gear."
+  },
+  {
+    "round": 2,
+    "name": "Chinese GP",
+    "circuit": "Shanghai",
+    "date": "15 Mar 2026",
+    "p1": { "name": "Antonelli", "team": "Mercedes" },
+    "p2": { "name": "Russell", "team": "Mercedes", "delta": "+0.672s" },
+    "p3": { "name": "Hamilton", "team": "Ferrari", "delta": "+5.1s" },
+    "rest": "4. Leclerc · 5. Bearman · 6. Norris · DNF: Both McLarens",
+    "note": "Antonelli pole to win — 2nd youngest winner ever. Hamilton's first Ferrari podium in 26 starts.",
+    "egg": "Kid's not here to make up the numbers. Kimi Antonelli just announced himself."
+  }
+]

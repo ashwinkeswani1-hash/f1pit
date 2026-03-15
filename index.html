@@ -14,8 +14,8 @@
 :root{--red:#FF1801;--bg:#0a0a0a;--surf:#141414;--surf2:#1e1e1e;--ink:#fff;--dim:#888;--faint:#444;--line:#222;--line2:#333}
 /* LIGHT MODE — proper contrast, nothing washed out */
 .light{--bg:#f8f8f8;--surf:#ececec;--surf2:#e0e0e0;--ink:#080808;--dim:#333;--faint:#666;--line:#d0d0d0;--line2:#bbb}
-html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;height:100%}
-.shell{background:var(--bg);transition:background .25s;display:flex;flex-direction:column;height:100vh;min-height:600px}
+html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;height:100%}
+.shell{background:var(--bg);transition:background .25s;display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
 
 /* TOP BAR — full width, no max-width cap */
 .topbar{border-bottom:0.5px solid var(--line);background:var(--bg);transition:background .25s,border-color .25s;flex-shrink:0;z-index:20;position:relative}
@@ -58,7 +58,7 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;
 .mob-footer{border-top:0.5px solid var(--line);padding:16px 24px;font-size:11px;color:var(--faint);font-weight:300;transition:border-color .25s,color .25s}
 
 /* PANELS — full width, no max-width */
-.panel{display:none;flex:1;flex-direction:column;min-height:0}
+.panel{display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden}
 .panel.on{display:flex}
 .zone{flex:1;display:flex;align-items:center;min-height:0;overflow:hidden}
 .wrap{width:100%;padding:0 48px}
@@ -172,58 +172,65 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;
   .burger{display:flex}
   .tabs{display:none}
   .ti{padding:0 16px;height:48px}
-  /* No overflow on any panel except results */
-  .zone{align-items:flex-start;overflow:hidden}
-  .panel.on:not(#hist){display:flex;overflow:hidden}
-  .wrap{padding:16px}
-  .two-col{grid-template-columns:1fr;gap:12px}
-  .nr-body{grid-template-columns:1fr;gap:12px}
-  .nr-header{margin-bottom:12px;text-align:center}
-  /* Compress hero */
-  .hero-eye{font-size:10px;margin-bottom:4px}
-  .hero-num{font-size:clamp(44px,13vw,64px);line-height:.88}
-  .hero-sub{max-width:100%;font-size:13px;margin-top:8px;line-height:1.5}
-  /* Compress podium list */
-  .mrow{padding:10px 0}
-  .mn{font-size:clamp(22px,6vw,32px)}
-  .mteam{font-size:11px;margin-top:2px}
-  .mv{font-size:clamp(16px,4vw,22px)}
-  .mv small{font-size:10px}
-  .rest{font-size:13px;padding-top:8px;line-height:1.7}
-  /* Compress next race */
-  .nr-name{font-size:clamp(28px,8vw,44px)}
-  .nr-meta{font-size:11px;margin-top:4px}
-  .cd-label,.facts-label{font-size:10px;margin-bottom:8px}
-  .cd-blocks{gap:5px}
-  .cd-block{padding:10px 4px 8px}
-  .cd-n{font-size:clamp(24px,7vw,38px)}
-  .cd-l{font-size:9px;margin-top:3px}
-  .facts{gap:6px}
-  .fv{font-size:16px}
-  .fl{font-size:10px}
-  /* Compress standings */
-  .leader-box{padding:16px}
-  .leader-name{font-size:clamp(36px,10vw,52px)}
-  .leader-team{font-size:13px;margin-top:6px}
-  .leader-pts{font-size:clamp(32px,9vw,44px);margin-top:6px}
-  .leader-pts span{font-size:18px}
-  .sitem{padding:8px 0}
-  .sn{font-size:clamp(18px,5vw,24px)}
-  .st{font-size:11px}
-  .sp{font-size:clamp(20px,5vw,26px)}
+  /* All zones strictly clipped — no scroll */
+  .zone{overflow:hidden;align-items:flex-start}
+  .wrap{padding:12px 16px}
+  .two-col{grid-template-columns:1fr;gap:10px}
+  .nr-body{grid-template-columns:1fr;gap:10px}
+  .nr-header{margin-bottom:10px;text-align:center}
+  /* Hero — compact */
+  .hero-eye{font-size:10px;margin-bottom:3px;letter-spacing:2px}
+  .hero-num{font-size:clamp(40px,12vw,58px);line-height:.88}
+  .hero-sub{max-width:100%;font-size:12px;margin-top:6px;line-height:1.4}
+  .egg{font-size:11px}
+  /* Podium list — compact */
+  .mrow{padding:8px 0}
+  .mn{font-size:clamp(20px,5.5vw,28px)}
+  .mteam{font-size:10px;margin-top:1px}
+  .tdot{width:5px;height:5px}
+  .mv{font-size:clamp(14px,4vw,20px)}
+  .mv small{font-size:9px}
+  .rest{font-size:11px;padding-top:6px;line-height:1.6}
+  /* Next race — compact */
+  .nr-name{font-size:clamp(24px,7vw,38px)}
+  .nr-meta{font-size:10px;margin-top:3px}
+  .cd-label,.facts-label{font-size:10px;margin-bottom:6px}
+  .cd-blocks{gap:4px}
+  .cd-block{padding:8px 4px 6px;border-radius:6px}
+  .cd-n{font-size:clamp(20px,6vw,32px)}
+  .cd-l{font-size:8px;margin-top:2px}
+  .facts{gap:5px}
+  .fact{padding:10px 8px;border-radius:6px}
+  .fv{font-size:14px}
+  .fl{font-size:9px;margin-top:3px}
+  /* Standings — compact */
+  .leader-box{padding:12px 14px}
+  .leader-name{font-size:clamp(32px,9vw,46px)}
+  .leader-team{font-size:12px;margin-top:5px}
+  .leader-pts{font-size:clamp(28px,8vw,40px);margin-top:5px}
+  .leader-pts span{font-size:15px}
+  .sitem{padding:7px 0}
+  .srank{font-size:11px}
+  .sn{font-size:clamp(16px,4.5vw,22px)}
+  .st{font-size:10px;margin-top:1px}
+  .str{margin-top:4px}
+  .sp{font-size:clamp(18px,5vw,24px)}
   .sl{font-size:9px}
   .sg{font-size:10px}
-  /* Results — allow scroll */
-  .results-zone{overflow-y:auto}
-  .results-wrap{padding:12px 16px}
-  .hgp{font-size:16px}
-  .hdate{font-size:11px}
-  .hwinner{font-size:15px}
-  /* Footer/misc */
-  .foot-i{padding:8px 16px}
-  .cbubble{right:-8px;width:220px}
+  /* Results — ONLY tab that scrolls */
+  #hist .results-zone{overflow-y:auto}
+  .results-wrap{padding:10px 16px}
+  .hcard{padding:10px 12px}
+  .hgp{font-size:15px}
+  .hdate{font-size:10px}
+  .hwinner{font-size:13px}
+  /* Footer */
+  .foot-i{padding:7px 16px}
+  .ftxt{font-size:9px}
+  .cname{font-size:10px}
+  /* Ticker */
   .ticker-wrap{height:24px}
-  .tick{font-size:10px}
+  .tick{font-size:10px;padding-right:32px}
 }
 </style>
 </head>

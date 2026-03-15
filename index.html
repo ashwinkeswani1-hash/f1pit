@@ -3,276 +3,377 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0a0a0a">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>F1Pit — 2026 Season</title>
 <meta name="description" content="The fastest F1 results tracker. Podium, standings, next race — zero noise.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@800&family=Saira:wght@300;400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{
-  --red:#FF1801;
-  --bg:#ffffff;--surf:#f4f4f4;--surf2:#ebebeb;
-  --ink:#0a0a0a;--dim:#555;--faint:#999;
-  --line:#e0e0e0;--line2:#ccc;
-}
-.dark{
-  --bg:#0a0a0a;--surf:#141414;--surf2:#1e1e1e;
-  --ink:#ffffff;--dim:#888;--faint:#505050;
-  --line:#222;--line2:#333;
-}
-html,body{background:var(--bg);transition:background .3s;min-height:100vh}
-.shell{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);display:flex;flex-direction:column;font-family:'Saira',sans-serif;transition:background .3s}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:0.5px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10;transition:background .3s,border-color .3s}
-.mark{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:1px;color:var(--ink);cursor:pointer;user-select:none;transition:color .3s}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.badge{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:300;text-transform:uppercase;transition:color .3s}
-.pulse{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pu 1.8s ease-in-out infinite;flex-shrink:0}
+:root{--red:#FF1801;--bg:#0a0a0a;--surf:#141414;--surf2:#1e1e1e;--ink:#fff;--dim:#888;--faint:#444;--line:#222;--line2:#333}
+.light{--bg:#fff;--surf:#f5f5f5;--surf2:#ebebeb;--ink:#0a0a0a;--dim:#555;--faint:#aaa;--line:#e8e8e8;--line2:#ccc}
+html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow-x:hidden;height:100%}
+.shell{background:var(--bg);transition:background .25s;display:flex;flex-direction:column;height:100vh;min-height:600px}
+
+/* TOP BAR */
+.topbar{border-bottom:0.5px solid var(--line);background:var(--bg);transition:background .25s,border-color .25s;flex-shrink:0;z-index:20;position:relative}
+.ti{max-width:1280px;margin:0 auto;padding:0 40px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.ti-left{display:flex;align-items:center;gap:12px}
+.mark{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;letter-spacing:1px;color:var(--ink);cursor:pointer;user-select:none;transition:color .25s}
+.tr{display:flex;align-items:center;gap:14px}
+.badge{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;color:var(--dim);font-weight:300;text-transform:uppercase;transition:color .25s}
+.dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pu 1.8s infinite;flex-shrink:0}
 @keyframes pu{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.6)}}
-.mode-toggle{width:40px;height:22px;border-radius:11px;background:var(--surf2);border:0.5px solid var(--line2);cursor:pointer;position:relative;transition:background .3s,border-color .3s;flex-shrink:0}
-.mode-thumb{width:16px;height:16px;border-radius:50%;background:var(--dim);position:absolute;top:2px;left:3px;transition:transform .25s,background .3s}
-.dark .mode-thumb{transform:translateX(18px);background:var(--ink)}
-.mode-icon{font-size:10px;position:absolute;top:50%;transform:translateY(-50%);transition:opacity .2s;line-height:1}
-.mode-icon.sun{right:5px;opacity:1}
-.mode-icon.moon{left:5px;opacity:0}
-.dark .mode-icon.sun{opacity:0}
-.dark .mode-icon.moon{opacity:1}
-.tabs{display:flex;border-bottom:0.5px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:51px;background:var(--bg);z-index:9;transition:background .3s,border-color .3s}
+.mt{width:42px;height:22px;border-radius:11px;background:var(--surf2);border:0.5px solid var(--line2);cursor:pointer;position:relative;flex-shrink:0;transition:background .25s}
+.mth{width:16px;height:16px;border-radius:50%;background:var(--ink);position:absolute;top:2px;left:3px;transition:transform .25s;display:flex;align-items:center;justify-content:center;font-size:8px;line-height:1}
+.mth::after{content:'☽';color:var(--bg);transition:color .25s}
+.light .mth{transform:translateX(20px)}
+.light .mth::after{content:'☀'}
+
+/* HAMBURGER — phone only */
+.burger{display:none;width:36px;height:36px;border:0.5px solid var(--line2);border-radius:6px;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:4px;background:transparent;flex-shrink:0;transition:border-color .15s}
+.burger:hover{border-color:var(--dim)}
+.burger span{display:block;width:16px;height:1.5px;background:var(--ink);border-radius:1px;transition:background .25s}
+
+/* TABS — tablet + desktop */
+.tabs{border-bottom:0.5px solid var(--line);background:var(--bg);transition:background .25s,border-color .25s;flex-shrink:0;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:1;min-width:68px;font-family:'Saira Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:1px;padding:12px 4px;cursor:pointer;color:var(--faint);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;text-transform:uppercase;text-align:center;white-space:nowrap}
+.tabs-i{max-width:1280px;margin:0 auto;padding:0 40px;display:flex}
+.tab{font-family:'Saira Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:11px 18px;cursor:pointer;color:var(--faint);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;text-transform:uppercase;white-space:nowrap}
 .tab.on{color:var(--red);border-bottom-color:var(--red)}
-.tab:active{opacity:.6}
-.panel{display:none;flex:1;padding-bottom:28px}.panel.on{display:block}
-.hero{padding:24px 16px 0;cursor:pointer;user-select:none}
-.hero-eye{font-size:10px;font-weight:300;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;margin-bottom:4px;transition:color .3s}
-.hero-num{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(62px,17vw,86px);color:var(--red);line-height:.9}
-.hero-sub{font-size:13px;font-weight:300;color:var(--dim);margin-top:10px;line-height:1.6;transition:color .3s}
-.hero-sub b{color:var(--ink);font-weight:400;transition:color .3s}
-.egg{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--red);padding:0 16px;max-height:0;overflow:hidden;opacity:0;transition:max-height .3s,opacity .3s}
-.egg.show{max-height:40px;opacity:1;padding-top:10px}
-.mini-list{margin:16px 16px 0;border-top:0.5px solid var(--line);transition:border-color .3s}
-.mini-row{display:flex;align-items:center;padding:12px 0;border-bottom:0.5px solid var(--line);gap:10px;transition:border-color .3s}
-.mini-row:last-child{border:none}
-.mini-pos{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:11px;color:var(--faint);width:22px;text-align:center;letter-spacing:1px;transition:color .3s}
-.mini-name{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--ink);flex:1;line-height:1;transition:color .3s}
-.mini-team{font-size:11px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:5px;margin-top:3px;transition:color .3s}
-.tdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.mini-val{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--ink);text-align:right;transition:color .3s}
-.mini-val small{font-size:10px;color:var(--faint);font-weight:300;display:block;text-align:right;transition:color .3s}
-.rest{font-size:12px;color:var(--faint);font-weight:300;padding:10px 16px 0;line-height:1.9;transition:color .3s}
-.ticker{overflow:hidden;height:30px;border-top:0.5px solid var(--line);margin-top:16px;transition:border-color .3s}
-.ticker-track{display:flex;gap:40px;animation:scroll 32s linear infinite;white-space:nowrap;padding:8px 0 0 20px}
-@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.tick{font-size:11px;font-weight:300;color:var(--dim);transition:color .3s}
-.tick.hot{color:var(--red)}
-.cd-wrap{padding:24px 16px 0}
-.cd-eye{font-size:10px;font-weight:300;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;margin-bottom:14px;transition:color .3s}
-.cd-blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.cd-block{background:var(--surf);border:0.5px solid var(--line2);padding:16px 4px 13px;text-align:center;border-radius:8px;transition:background .3s,border-color .3s}
-.cd-n{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(34px,9vw,50px);line-height:1;color:var(--ink);transition:color .3s}
-.cd-l{font-size:9px;font-weight:300;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-top:4px;transition:color .3s}
-.nr-details{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 16px 0}
-.nr-fact{background:var(--surf);border:0.5px solid var(--line);padding:16px 12px;cursor:pointer;border-radius:8px;text-align:center;transition:background .3s,border-color .15s;min-height:64px;display:flex;flex-direction:column;justify-content:center}
-.nr-fact:active{opacity:.7}
-.nr-val{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--ink);line-height:1;transition:color .3s}
-.nr-lbl{font-size:10px;font-weight:300;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;margin-top:4px;transition:color .3s}
-.tyres{display:flex;justify-content:center;gap:14px;padding:20px 0 4px}
-.tyre{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:transform .15s,border-color .3s;border:2.5px solid var(--line2);color:var(--faint)}
+.tab:hover:not(.on){color:var(--ink)}
+
+/* MOBILE OVERLAY MENU */
+.mob-menu{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column;transition:background .25s}
+.mob-menu.open{display:flex}
+.mob-header{height:52px;border-bottom:0.5px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;transition:border-color .25s}
+.mob-close{width:36px;height:36px;border:0.5px solid var(--line2);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--dim);line-height:1;transition:color .15s,border-color .15s}
+.mob-close:hover{color:var(--ink);border-color:var(--dim)}
+.mob-tabs{flex:1;padding:12px 0}
+.mob-tab{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:1px;padding:20px 24px;cursor:pointer;color:var(--dim);border-left:3px solid transparent;transition:all .15s;text-transform:uppercase;display:block}
+.mob-tab.on{color:var(--red);border-left-color:var(--red)}
+.mob-tab:active{opacity:.6}
+.mob-footer{border-top:0.5px solid var(--line);padding:16px 24px;font-size:11px;color:var(--faint);font-weight:300;transition:border-color .25s,color .25s}
+
+/* PANELS */
+.panel{display:none;flex:1;flex-direction:column;min-height:0}
+.panel.on{display:flex}
+.zone{flex:1;display:flex;align-items:center;min-height:0;overflow:hidden}
+.wrap{max-width:1280px;width:100%;margin:0 auto;padding:48px 40px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;width:100%}
+
+/* HERO */
+.hero-eye{font-size:10px;font-weight:300;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;margin-bottom:6px;transition:color .25s}
+.hero-num{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(52px,7vw,100px);line-height:.88;cursor:pointer;user-select:none}
+.hero-sub{font-size:13px;font-weight:300;color:var(--dim);margin-top:12px;line-height:1.6;max-width:480px;transition:color .25s}
+.hero-sub b{color:var(--ink);font-weight:400;transition:color .25s}
+.egg{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--red);max-height:0;overflow:hidden;opacity:0;transition:max-height .3s,opacity .3s}
+.egg.show{max-height:36px;opacity:1;padding-top:10px}
+
+/* PODIUM */
+.mlist{border-top:0.5px solid var(--line);transition:border-color .25s}
+.mrow{display:flex;align-items:center;padding:14px 0;border-bottom:0.5px solid var(--line);gap:12px;transition:border-color .25s}
+.mrow:last-child{border:none}
+.mpos{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:11px;color:var(--faint);width:22px;text-align:center;letter-spacing:1px;transition:color .25s}
+.mn{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--ink);flex:1;line-height:1;transition:color .25s}
+.mteam{font-size:10px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:4px;margin-top:3px;transition:color .25s}
+.tdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.mv{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--ink);text-align:right;transition:color .25s}
+.mv small{font-size:10px;color:var(--faint);font-weight:300;display:block;text-align:right;transition:color .25s}
+.rest{font-size:12px;color:var(--faint);font-weight:300;padding:10px 0 0;line-height:1.9;transition:color .25s}
+
+/* NEXT RACE */
+.nr-name{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(28px,3.5vw,48px);color:var(--ink);line-height:1;margin-bottom:4px;transition:color .25s}
+.nr-meta{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-bottom:20px;transition:color .25s}
+.cd-blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cd-block{background:var(--surf);border:0.5px solid var(--line2);padding:16px 8px 12px;text-align:center;border-radius:8px;transition:background .25s,border-color .25s}
+.cd-n{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(26px,3.5vw,46px);line-height:1;color:var(--ink);transition:color .25s}
+.cd-l{font-size:9px;font-weight:300;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-top:5px;transition:color .25s}
+.nr-egg{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:12px;color:var(--red);margin-top:12px;opacity:0;transition:opacity .3s;min-height:18px}
+.nr-egg.show{opacity:1}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.fact{background:var(--surf);border:0.5px solid var(--line);padding:14px;cursor:pointer;border-radius:8px;text-align:center;transition:background .25s,border-color .15s}
+.fact:hover{border-color:var(--line2)}
+.fv{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--ink);line-height:1;transition:color .25s}
+.fl{font-size:10px;font-weight:300;letter-spacing:1.5px;color:var(--faint);text-transform:uppercase;margin-top:4px;transition:color .25s}
+.tyres{display:flex;justify-content:center;gap:14px;padding:4px 0 0}
+.tyre{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:transform .15s;border:2.5px solid var(--line2);color:var(--faint)}
+.tyre:hover{transform:scale(1.15)}
 .tyre:active{transform:scale(.9)}
 .tyre.S{border-color:var(--red);color:var(--red)}
 .tyre.M{border-color:#D4A017;color:#D4A017}
 .tyre.H{border-color:var(--dim);color:var(--dim)}
-.tyre-quip{font-size:12px;font-style:italic;color:var(--red);text-align:center;min-height:20px;opacity:0;transition:opacity .25s;padding-bottom:4px}
-.tyre-quip.show{opacity:1}
-.section-eye{font-size:10px;font-weight:300;letter-spacing:2.5px;color:var(--faint);text-transform:uppercase;padding:24px 16px 0;transition:color .3s}
-.stand-list{padding:0 16px}
-.stand-item{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:0.5px solid var(--line);transition:border-color .3s}
-.stand-item:last-child{border:none}
-.srank{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:12px;width:22px;color:var(--faint);letter-spacing:1px;text-align:center;transition:color .3s}
-.srank.g{color:#C9A84C}
-.sinfo{flex:1;min-width:0}
-.sname{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1;color:var(--ink);transition:color .3s}
-.steam{font-size:11px;font-weight:300;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-top:3px;display:flex;align-items:center;gap:5px;transition:color .3s}
-.strack{height:2px;background:var(--line);margin-top:7px;border-radius:1px;transition:background .3s}
-.strack-fill{height:100%;border-radius:1px}
-.sright{text-align:right}
-.spts{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1;color:var(--ink);transition:color .3s}
-.spts-lbl{font-size:9px;letter-spacing:1.5px;color:var(--faint);font-weight:300;transition:color .3s}
-.sgap{font-size:11px;color:var(--faint);margin-top:2px;transition:color .3s}
-.hist-header{display:flex;align-items:baseline;justify-content:space-between;padding:24px 16px 0}
-.hist-title-txt{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;transition:color .3s}
-.hist-count{font-size:10px;color:var(--faint);font-weight:300;transition:color .3s}
-.hist-list{padding:0 16px}
-.hist-card{border-bottom:0.5px solid var(--line);padding:14px 0;cursor:pointer;transition:border-color .3s}
-.hist-card:last-child{border:none}
-.hist-card:active{opacity:.6}
-.hist-top{display:flex;align-items:center;gap:10px}
-.hist-round{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:11px;color:var(--faint);width:28px;letter-spacing:1px;transition:color .3s}
-.hist-gp{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--ink);flex:1;line-height:1;transition:color .3s}
-.hist-date-txt{font-size:11px;color:var(--faint);font-weight:300;margin-top:2px;transition:color .3s}
-.hist-winner{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:17px;color:var(--red)}
-.hist-detail{display:none;margin-top:12px;padding:12px 14px;background:var(--surf);border-radius:8px;transition:background .3s}
-.hist-podium{display:flex;gap:20px;margin-bottom:8px}
-.hist-p{font-size:11px;color:var(--dim);font-weight:300;transition:color .3s}
-.hist-p b{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:15px;color:var(--ink);display:block;line-height:1.1;transition:color .3s}
-.hist-rest-txt{font-size:11px;color:var(--faint);font-weight:300;margin-top:8px;line-height:1.9;transition:color .3s}
-.hist-note{font-size:12px;font-style:italic;color:var(--dim);margin-top:10px;line-height:1.5;border-left:2px solid var(--red);padding-left:10px;transition:color .3s}
-.bottombar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:0.5px solid var(--line);margin-top:auto;transition:border-color .3s}
-.btxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase;transition:color .3s}
-.credit{font-size:10px;font-weight:300;color:var(--faint);transition:color .3s}
-.credit a{color:var(--dim);text-decoration:none;border-bottom:0.5px solid var(--line2);padding-bottom:1px;transition:color .15s,border-color .15s}
-.credit a:hover,.credit a:active{color:var(--red);border-bottom-color:var(--red)}
+.tquip{font-size:12px;font-style:italic;color:var(--red);text-align:center;min-height:20px;opacity:0;transition:opacity .25s;margin-top:8px}
+.tquip.show{opacity:1}
+
+/* RESULTS */
+.results-zone{flex:1;overflow-y:auto;min-height:0}
+.results-wrap{max-width:1280px;width:100%;margin:0 auto;padding:24px 40px}
+.hist-list{display:flex;flex-direction:column;gap:6px}
+.hcard{border:0.5px solid var(--line);padding:12px 16px;cursor:pointer;border-radius:8px;transition:border-color .15s}
+.hcard:hover:not(.future){border-color:var(--line2)}
+.hcard.future{opacity:.38;cursor:default}
+.htop{display:flex;align-items:center;gap:10px}
+.hrnd{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:10px;color:var(--faint);width:24px;letter-spacing:1px;transition:color .25s}
+.hgp{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--ink);flex:1;line-height:1;transition:color .25s}
+.hdate{font-size:10px;color:var(--faint);font-weight:300;margin-top:2px;transition:color .25s}
+.hwinner{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:15px}
+.hwinner.tbd{color:var(--faint)}
+.hdetail{display:none;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--line);transition:border-color .25s}
+.hpod{display:flex;gap:16px;margin-bottom:6px}
+.hp{font-size:10px;color:var(--dim);font-weight:300;transition:color .25s}
+.hp b{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--ink);display:block;line-height:1.1;transition:color .25s}
+.hrest{font-size:10px;color:var(--faint);font-weight:300;margin-top:4px;line-height:1.8;transition:color .25s}
+.hnote{font-size:11px;font-style:italic;color:var(--dim);margin-top:6px;line-height:1.4;border-left:2px solid var(--red);padding-left:8px;transition:color .25s}
+
+/* STANDINGS */
+.leader-box{border-radius:8px;padding:22px;position:relative;cursor:pointer}
+.leader-name{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:clamp(32px,4vw,52px);color:var(--ink);line-height:.95;transition:color .25s}
+.leader-team{font-size:11px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:8px;display:flex;align-items:center;gap:5px;transition:color .25s}
+.leader-pts{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:44px;line-height:1;margin-top:10px}
+.leader-pts span{font-size:14px;color:var(--faint);font-weight:300;letter-spacing:1px}
+.sitem{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:0.5px solid var(--line);transition:border-color .25s}
+.sitem:last-child{border:none}
+.srank{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:11px;width:22px;color:var(--faint);letter-spacing:1px;text-align:center;transition:color .25s}
+.si{flex:1;min-width:0}
+.sn{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:22px;line-height:1;color:var(--ink);transition:color .25s}
+.st{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--dim);text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:4px;transition:color .25s}
+.str{height:2px;background:var(--line);margin-top:6px;border-radius:1px;transition:background .25s}
+.strf{height:100%;border-radius:1px}
+.sr{text-align:right}
+.sp{font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:26px;line-height:1;color:var(--ink);transition:color .25s}
+.sl{font-size:9px;letter-spacing:1.5px;color:var(--faint);font-weight:300;transition:color .25s}
+.sg{font-size:10px;color:var(--faint);margin-top:1px;transition:color .25s}
+
+/* TICKER + FOOTER */
+.ticker-wrap{overflow:hidden;height:28px;border-top:0.5px solid var(--line);flex-shrink:0;transition:border-color .25s}
+.ticker-inner{display:flex;width:max-content;animation:tk 28s linear infinite;height:100%;align-items:center}
+@keyframes tk{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick{font-size:11px;font-weight:300;color:var(--dim);padding-right:48px;white-space:nowrap;transition:color .25s}
+.tick.hot{color:var(--red)}
+.foot{border-top:0.5px solid var(--line);flex-shrink:0;transition:border-color .25s}
+.foot-i{max-width:1280px;margin:0 auto;padding:10px 40px;display:flex;justify-content:space-between;align-items:center}
+.ftxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase;transition:color .25s}
+.cwrap{position:relative}
+.cname{font-size:11px;font-weight:400;color:var(--dim);cursor:default;user-select:none;transition:color .15s}
+.cwrap:hover .cname{color:var(--red)}
+.cbubble{visibility:hidden;opacity:0;position:absolute;bottom:calc(100% + 10px);right:0;background:var(--surf2);border:0.5px solid var(--line2);border-radius:8px;padding:12px 14px;width:256px;z-index:99;transition:opacity .15s,visibility .15s;pointer-events:none}
+.cwrap:hover .cbubble{visibility:visible;opacity:1;pointer-events:auto}
+.cbubble::after{content:'';position:absolute;bottom:-5px;right:14px;width:8px;height:8px;background:var(--surf2);border-right:0.5px solid var(--line2);border-bottom:0.5px solid var(--line2);transform:rotate(45deg)}
+.cbubble p{font-size:11px;color:var(--dim);line-height:1.6;font-weight:300;user-select:text;transition:color .25s}
+.cbubble p b{color:var(--ink);font-weight:400;display:block;margin-top:4px;user-select:text;transition:color .25s}
+
+/* RESPONSIVE */
+@media(max-width:1199px){
+  .ti,.tabs-i,.foot-i,.results-wrap{padding-left:28px;padding-right:28px}
+  .wrap{padding:36px 28px}
+  .two-col{gap:48px}
+}
+@media(max-width:767px){
+  .burger{display:flex}
+  .tabs{display:none}
+  .ti{padding:0 16px;height:48px}
+  .zone{align-items:flex-start;overflow-y:auto}
+  .wrap{padding:20px 16px}
+  .two-col{grid-template-columns:1fr;gap:20px}
+  .hero-num{font-size:clamp(48px,13vw,68px)}
+  .hero-sub{max-width:100%}
+  .cd-blocks{gap:5px}
+  .cd-n{font-size:clamp(22px,6vw,32px)}
+  .facts{gap:6px}
+  .fv{font-size:18px}
+  .results-wrap{padding:16px}
+  .foot-i{padding:10px 16px}
+  .cbubble{right:-8px;width:220px}
+  .leader-pts{font-size:36px}
+  .leader-name{font-size:30px}
+}
 </style>
 </head>
 <body>
 <div class="shell" id="shell">
 
   <div class="topbar">
-    <div class="mark" id="logo-tap">F1<span style="color:var(--red)">PIT</span></div>
-    <div class="topbar-right">
-      <div class="badge"><span class="pulse"></span><span id="round-badge">2026</span></div>
-      <div class="mode-toggle" id="mode-toggle" title="Toggle day/night">
-        <div class="mode-thumb"></div>
-        <span class="mode-icon sun">☀</span>
-        <span class="mode-icon moon">☽</span>
+    <div class="ti">
+      <div class="ti-left">
+        <div class="burger" id="burger" onclick="openMenu()">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="mark" id="logo-tap">F1<span style="color:var(--red)">PIT</span></div>
+      </div>
+      <div class="tr">
+        <div class="badge"><span class="dot"></span><span id="rbadge">Race 2 of 24</span></div>
+        <div class="mt" id="mt"><div class="mth"></div></div>
       </div>
     </div>
   </div>
 
   <div class="tabs">
-    <div class="tab on"  onclick="sw('podium',this)">Podium</div>
-    <div class="tab"     onclick="sw('history',this)">Results</div>
-    <div class="tab"     onclick="sw('next',this)">Next</div>
-    <div class="tab"     onclick="sw('drivers',this)">Drivers</div>
-    <div class="tab"     onclick="sw('teams',this)">Teams</div>
+    <div class="tabs-i">
+      <div class="tab on"  onclick="sw('pod',this)">Podium</div>
+      <div class="tab"     onclick="sw('hist',this)">Results</div>
+      <div class="tab"     onclick="sw('nr',this)">Next Race</div>
+      <div class="tab"     onclick="sw('drv',this)">Drivers</div>
+      <div class="tab"     onclick="sw('ctor',this)">Constructors</div>
+    </div>
+  </div>
+
+  <div class="mob-menu" id="mob-menu">
+    <div class="mob-header">
+      <div class="mark">F1<span style="color:var(--red)">PIT</span></div>
+      <div class="mob-close" onclick="closeMenu()">✕</div>
+    </div>
+    <div class="mob-tabs">
+      <div class="mob-tab on"  onclick="mobSw('pod',this)">Podium</div>
+      <div class="mob-tab"     onclick="mobSw('hist',this)">Results</div>
+      <div class="mob-tab"     onclick="mobSw('nr',this)">Next Race</div>
+      <div class="mob-tab"     onclick="mobSw('drv',this)">Drivers</div>
+      <div class="mob-tab"     onclick="mobSw('ctor',this)">Constructors</div>
+    </div>
+    <div class="mob-footer">F1Pit · 2026 · Made by Ashwin K</div>
   </div>
 
   <!-- PODIUM -->
-  <div id="podium" class="panel on">
-    <div class="hero" onclick="egg('eg-win')">
-      <div class="hero-eye" id="p-eye">Loading latest race...</div>
-      <div class="hero-num" id="p-winner"></div>
-      <div class="hero-sub" id="p-sub"></div>
-    </div>
-    <div class="egg" id="eg-win"></div>
-    <div class="mini-list">
-      <div class="mini-row">
-        <div class="mini-pos">P2</div>
-        <div style="flex:1">
-          <div class="mini-name" id="p2-name"></div>
-          <div class="mini-team"><span class="tdot" id="p2-dot"></span><span id="p2-team"></span></div>
+  <div id="pod" class="panel on">
+    <div class="zone"><div class="wrap">
+      <div class="two-col">
+        <div onclick="egg('ew')">
+          <div class="hero-eye" id="p-eye">Loading latest race...</div>
+          <div class="hero-num" id="p-win"></div>
+          <div class="hero-sub" id="p-sub"></div>
+          <div class="egg" id="ew"></div>
         </div>
-        <div class="mini-val" id="p2-val"></div>
-      </div>
-      <div class="mini-row">
-        <div class="mini-pos">P3</div>
-        <div style="flex:1">
-          <div class="mini-name" id="p3-name"></div>
-          <div class="mini-team"><span class="tdot" id="p3-dot"></span><span id="p3-team"></span></div>
+        <div>
+          <div class="mlist">
+            <div class="mrow"><div class="mpos">P2</div><div style="flex:1"><div class="mn" id="p2n"></div><div class="mteam"><span class="tdot" id="p2dot"></span><span id="p2t"></span></div></div><div class="mv" id="p2v"></div></div>
+            <div class="mrow"><div class="mpos">P3</div><div style="flex:1"><div class="mn" id="p3n"></div><div class="mteam"><span class="tdot" id="p3dot"></span><span id="p3t"></span></div></div><div class="mv" id="p3v"></div></div>
+          </div>
+          <div class="rest" id="p-rest"></div>
         </div>
-        <div class="mini-val" id="p3-val"></div>
       </div>
-    </div>
-    <div class="rest" id="p-rest"></div>
-    <div class="ticker"><div class="ticker-track" id="t1"></div></div>
+    </div></div>
+    <div class="ticker-wrap"><div class="ticker-inner" id="tk1"></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- RESULTS -->
-  <div id="history" class="panel">
-    <div class="hist-header">
-      <div class="hist-title-txt">All Results</div>
-      <div class="hist-count" id="race-count"></div>
-    </div>
-    <div class="hist-list" id="hist-list"></div>
-    <div class="ticker"><div class="ticker-track" id="t2"></div></div>
+  <div id="hist" class="panel">
+    <div class="results-zone"><div class="results-wrap"><div class="hist-list" id="hist-list"></div></div></div>
+    <div class="ticker-wrap"><div class="ticker-inner" id="tk2"></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- NEXT RACE -->
-  <div id="next" class="panel">
-    <div class="cd-wrap">
-      <div class="cd-eye" id="nr-eye">Loading next race...</div>
-      <div class="cd-blocks">
-        <div class="cd-block"><div class="cd-n" id="cd-d">--</div><div class="cd-l">Days</div></div>
-        <div class="cd-block"><div class="cd-n" id="cd-h">--</div><div class="cd-l">Hrs</div></div>
-        <div class="cd-block"><div class="cd-n" id="cd-m">--</div><div class="cd-l">Min</div></div>
-        <div class="cd-block"><div class="cd-n" id="cd-s">--</div><div class="cd-l">Sec</div></div>
+  <div id="nr" class="panel">
+    <div class="zone"><div class="wrap">
+      <div class="two-col">
+        <div>
+          <div class="nr-name" id="nr-name">Loading...</div>
+          <div class="nr-meta" id="nr-meta"></div>
+          <div class="cd-blocks">
+            <div class="cd-block"><div class="cd-n" id="cd-d">--</div><div class="cd-l">Days</div></div>
+            <div class="cd-block"><div class="cd-n" id="cd-h">--</div><div class="cd-l">Hrs</div></div>
+            <div class="cd-block"><div class="cd-n" id="cd-m">--</div><div class="cd-l">Min</div></div>
+            <div class="cd-block"><div class="cd-n" id="cd-s">--</div><div class="cd-l">Sec</div></div>
+          </div>
+          <div class="nr-egg" id="enr"></div>
+        </div>
+        <div id="nr-right">
+          <div class="facts">
+            <div class="fact"><div class="fv">--</div><div class="fl">Loading</div></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="nr-details" id="nr-facts"></div>
-    <div class="egg" id="eg-nr" style="padding:8px 16px 0"></div>
-    <div class="tyres">
-      <div class="tyre S" onclick="quip('Softs: fast, dramatic, gone in 10 laps.')">S</div>
-      <div class="tyre M" onclick="quip('Mediums: the sensible choice nobody admits to liking.')">M</div>
-      <div class="tyre H" onclick="quip('Hards: indestructible. Also joyless.')">H</div>
-    </div>
-    <div class="tyre-quip" id="tquip"></div>
-    <div class="ticker"><div class="ticker-track" id="t3"></div></div>
+    </div></div>
+    <div class="ticker-wrap"><div class="ticker-inner" id="tk3"></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- DRIVERS -->
-  <div id="drivers" class="panel">
-    <div class="section-eye">Drivers championship</div>
-    <div class="hero" onclick="egg('eg-drv')" style="padding-top:14px">
-      <div class="hero-eye">Championship leader</div>
-      <div class="hero-num" id="d-pts"></div>
-      <div class="hero-sub" id="d-sub"></div>
-    </div>
-    <div class="egg" id="eg-drv">Beating your teammate is the first war. Russell's winning it — barely.</div>
-    <div class="stand-list" id="dlist"></div>
-    <div class="ticker"><div class="ticker-track" id="t4"></div></div>
+  <div id="drv" class="panel">
+    <div class="zone"><div class="wrap">
+      <div class="two-col">
+        <div onclick="egg('edrv')">
+          <div class="leader-box" id="d-box">
+            <div class="leader-name" id="d-lname">Loading...</div>
+            <div class="leader-team" id="d-lteam"></div>
+            <div class="leader-pts" id="d-lpts"></div>
+            <div class="egg" id="edrv"></div>
+          </div>
+        </div>
+        <div id="dlist"></div>
+      </div>
+    </div></div>
+    <div class="ticker-wrap"><div class="ticker-inner" id="tk4"></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
-  <!-- TEAMS -->
-  <div id="teams" class="panel">
-    <div class="section-eye">Constructors championship</div>
-    <div class="hero" onclick="egg('eg-team')" style="padding-top:14px">
-      <div class="hero-eye">Constructors leader</div>
-      <div class="hero-num" id="t-pts"></div>
-      <div class="hero-sub" id="t-sub"></div>
-    </div>
-    <div class="egg" id="eg-team">The Silver Arrows are back. And they brought both drivers.</div>
-    <div class="stand-list" id="tlist"></div>
-    <div class="ticker"><div class="ticker-track" id="t5"></div></div>
-  </div>
-
-  <div class="bottombar">
-    <div class="btxt">F1Pit · 2026</div>
-    <div class="credit">Made by <a href="mailto:ashwin.keswani1@gmail.com">Ashwin K</a></div>
+  <!-- CONSTRUCTORS -->
+  <div id="ctor" class="panel">
+    <div class="zone"><div class="wrap">
+      <div class="two-col">
+        <div onclick="egg('ector')">
+          <div class="leader-box" id="t-box">
+            <div class="leader-name" id="t-lname">Loading...</div>
+            <div class="leader-pts" id="t-lpts"></div>
+            <div class="egg" id="ector"></div>
+          </div>
+        </div>
+        <div id="tlist"></div>
+      </div>
+    </div></div>
+    <div class="ticker-wrap"><div class="ticker-inner" id="tk5"></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
 </div>
 <script>
-const TC={'Mercedes':'#00D2BE','Ferrari':'#FF2800','Red Bull':'#3671C6','McLaren':'#FF8000','Aston Martin':'#358C75','Alpine':'#0093CC','Williams':'#64C4FF','Racing Bulls':'#6692FF','Haas':'#B6BABD','Audi':'#D0D0D0'};
-const NEXT_RACES=[
-  {name:'Japanese GP',circuit:'Suzuka Circuit',date:'29 Mar 2026',utc:'2026-03-29T05:00:00Z',facts:[{v:'130R',l:'Taken flat',egg:'290 km/h. No lift. Pure faith.'},{v:'Figure 8',l:'Layout',egg:'The only track that crosses over itself. Iconic.'},{v:'53 laps',l:'Race distance'},{v:'5.807 km',l:'Track length'}]},
-  {name:'Bahrain GP',circuit:'Bahrain International Circuit',date:'12 Apr 2026',utc:'2026-04-12T15:00:00Z',facts:[{v:'57 laps',l:'Race distance'},{v:'5.412 km',l:'Track length'},{v:'Night race',l:'Lights on at dusk',egg:'The desert night race. Strategies win here.'},{v:'Turn 4',l:'Overtake heaven'}]},
-  {name:'Saudi GP',circuit:'Jeddah Corniche Circuit',date:'19 Apr 2026',utc:'2026-04-19T17:00:00Z',facts:[{v:'50 laps',l:'Race distance'},{v:'6.174 km',l:'Longest street circuit',egg:'One mistake. You are in the wall.'},{v:'27 corners',l:'Nonstop'},{v:'322 km/h',l:'Top speed'}]},
-  {name:'Miami GP',circuit:'Miami International Autodrome',date:'3 May 2026',utc:'2026-05-03T20:00:00Z',facts:[{v:'57 laps',l:'Race distance'},{v:'Sprint',l:'Weekend format',egg:'F1 goes full Miami Vice. The racing is good now too.'},{v:'5.412 km',l:'Track length'},{v:'Hard Rock',l:'Iconic backdrop'}]},
-  {name:'Canadian GP',circuit:'Circuit Gilles Villeneuve',date:'24 May 2026',utc:'2026-05-24T18:00:00Z',facts:[{v:'70 laps',l:'Race distance'},{v:'Wall of Champions',l:'Career ender',egg:'It has eaten better drivers than you.'},{v:'4.361 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
-  {name:'Monaco GP',circuit:'Circuit de Monaco',date:'7 Jun 2026',utc:'2026-06-07T13:00:00Z',facts:[{v:'78 laps',l:'Race distance'},{v:'3.337 km',l:'Shortest circuit'},{v:'Tunnel',l:'Full throttle darkness',egg:'Monaco. Where overtaking goes to die.'},{v:'No overtaking',l:'Quali is everything'}]},
-  {name:'Barcelona GP',circuit:'Circuit de Barcelona-Catalunya',date:'14 Jun 2026',utc:'2026-06-14T13:00:00Z',facts:[{v:'66 laps',l:'Race distance'},{v:'4.657 km',l:'Track length'},{v:'Turn 3',l:'High speed blast'},{v:'Tyre test',l:'Degrades everything',egg:'If your car is good here, it is good everywhere.'}]},
-  {name:'Austrian GP',circuit:'Red Bull Ring',date:'28 Jun 2026',utc:'2026-06-28T13:00:00Z',facts:[{v:'71 laps',l:'Race distance'},{v:'4.318 km',l:'Track length'},{v:'Sprint',l:'Weekend format'},{v:'Turn 4',l:'Divebomb heaven',egg:'Short lap. Big drama.'}]},
-  {name:'British GP',circuit:'Silverstone',date:'5 Jul 2026',utc:'2026-07-05T14:00:00Z',facts:[{v:'52 laps',l:'Race distance'},{v:'Copse',l:'Flat out if you dare',egg:'Silverstone in the rain. The most British thing imaginable.'},{v:'5.891 km',l:'Track length'},{v:'Maggotts',l:'Best corner sequence'}]},
-  {name:'Belgian GP',circuit:'Spa-Francorchamps',date:'19 Jul 2026',utc:'2026-07-19T13:00:00Z',facts:[{v:'44 laps',l:'Race distance'},{v:'Eau Rouge',l:'The corner',egg:'Eau Rouge flat. This is what F1 is for.'},{v:'7.004 km',l:'Longest circuit'},{v:'Sprint',l:'Weekend format'}]},
-  {name:'Hungarian GP',circuit:'Hungaroring',date:'26 Jul 2026',utc:'2026-07-26T13:00:00Z',facts:[{v:'70 laps',l:'Race distance'},{v:'4.381 km',l:'Track length'},{v:'14 corners',l:'Technical'},{v:'Hard to pass',l:'Quali key',egg:'Monaco without the glamour.'}]},
-  {name:'Dutch GP',circuit:'Zandvoort',date:'23 Aug 2026',utc:'2026-08-23T13:00:00Z',facts:[{v:'72 laps',l:'Race distance'},{v:'Banked turns',l:'36° camber',egg:'100,000 orange fans. Intimidating for everyone except Max.'},{v:'4.259 km',l:'Track length'},{v:'Sea breeze',l:'Wind changes grip'}]},
-  {name:'Italian GP',circuit:'Monza',date:'6 Sep 2026',utc:'2026-09-06T13:00:00Z',facts:[{v:'53 laps',l:'Race distance'},{v:'362 km/h',l:'Top speed',egg:'The Temple of Speed. Engines do not last here.'},{v:'5.793 km',l:'Track length'},{v:'Tifosi',l:'Passionate crowd'}]},
-  {name:'Madrid GP',circuit:'IFEMA Madrid Circuit',date:'13 Sep 2026',utc:'2026-09-13T13:00:00Z',facts:[{v:'TBC laps',l:'Race distance'},{v:'New for 2026',l:'Brand new circuit',egg:'Zero history. Everything to play for.'},{v:'Sprint',l:'Weekend format'},{v:'Hot & dry',l:'Spain in September'}]},
-  {name:'Azerbaijan GP',circuit:'Baku City Circuit',date:'26 Sep 2026',utc:'2026-09-26T11:00:00Z',facts:[{v:'51 laps',l:'Race distance'},{v:'6.003 km',l:'Track length'},{v:'Walls everywhere',l:'No run-off',egg:'Always chaotic. Never boring. Expect a safety car.'},{v:'340 km/h',l:'Longest straight'}]},
-  {name:'Singapore GP',circuit:'Marina Bay Street Circuit',date:'11 Oct 2026',utc:'2026-10-11T12:00:00Z',facts:[{v:'62 laps',l:'Race distance'},{v:'Night race',l:'Under the lights',egg:'Humid, physical, relentless. The hardest race of the year.'},{v:'5.063 km',l:'Track length'},{v:'23 corners',l:'Zero rest'}]},
-  {name:'US GP',circuit:'Circuit of the Americas',date:'25 Oct 2026',utc:'2026-10-25T19:00:00Z',facts:[{v:'56 laps',l:'Race distance'},{v:'Turn 1',l:'Uphill blind entry',egg:'COTA Turn 1. You either commit or you do not.'},{v:'5.513 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
-  {name:'Mexico GP',circuit:'Autodromo Hermanos Rodriguez',date:'1 Nov 2026',utc:'2026-11-01T20:00:00Z',facts:[{v:'71 laps',l:'Race distance'},{v:'2,285m',l:'Altitude',egg:'2285 metres up. Engines lose 25% power. Strategies collide.'},{v:'4.304 km',l:'Track length'},{v:'Stadium sector',l:'Incredible atmosphere'}]},
-  {name:'São Paulo GP',circuit:'Interlagos',date:'8 Nov 2026',utc:'2026-11-08T18:00:00Z',facts:[{v:'71 laps',l:'Race distance'},{v:'Interlagos',l:'Iconic venue',egg:'Where legends are made and championships are decided.'},{v:'4.309 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
-  {name:'Las Vegas GP',circuit:'Las Vegas Strip Circuit',date:'21 Nov 2026',utc:'2026-11-22T06:00:00Z',facts:[{v:'50 laps',l:'Race distance'},{v:'The Strip',l:'5km straight',egg:'Racing past casinos at 3am. Only in F1.'},{v:'6.201 km',l:'Track length'},{v:'Night race',l:'Neon everywhere'}]},
-  {name:'Qatar GP',circuit:'Lusail International Circuit',date:'29 Nov 2026',utc:'2026-11-29T17:00:00Z',facts:[{v:'57 laps',l:'Race distance'},{v:'5.380 km',l:'Track length'},{v:'Sprint',l:'Weekend format'},{v:'Tyre killer',l:'Degrades fast',egg:'Qatar destroys tyres. Strategy calls every 10 laps.'}]},
-  {name:'Abu Dhabi GP',circuit:'Yas Marina Circuit',date:'6 Dec 2026',utc:'2026-12-06T13:00:00Z',facts:[{v:'58 laps',l:'Race distance'},{v:'Sunset start',l:'Day to night',egg:'The final race. Championships sealed. Tears guaranteed.'},{v:'5.281 km',l:'Track length'},{v:'Season finale',l:'All or nothing'}]},
+// ── TEAM COLORS ──────────────────────────────────────────────
+const TC={
+  'Mercedes':'#00D2BE','Ferrari':'#FF2800','Red Bull':'#3671C6',
+  'McLaren':'#FF8000','Aston Martin':'#358C75','Alpine':'#0093CC',
+  'Williams':'#64C4FF','Racing Bulls':'#6692FF','Haas':'#B6BABD','Audi':'#D0D0D0'
+};
+
+// ── FULL 2026 RACE CALENDAR ──────────────────────────────────
+const ALL_RACES=[
+  {r:1, name:'Australian GP',  circuit:'Albert Park',                   date:'8 Mar 2026'},
+  {r:2, name:'Chinese GP',     circuit:'Shanghai',                      date:'15 Mar 2026'},
+  {r:3, name:'Japanese GP',    circuit:'Suzuka Circuit',                date:'29 Mar 2026',  utc:'2026-03-29T05:00:00Z', facts:[{v:'130R',l:'Taken flat',egg:'290 km/h. No lift. Pure faith.'},{v:'Figure 8',l:'Layout',egg:'The only track that crosses over itself.'},{v:'53 laps',l:'Race distance'},{v:'5.807 km',l:'Track length'}]},
+  {r:4, name:'Bahrain GP',     circuit:'Bahrain International Circuit', date:'12 Apr 2026',  utc:'2026-04-12T15:00:00Z', facts:[{v:'57 laps',l:'Race distance'},{v:'5.412 km',l:'Track length'},{v:'Night race',l:'Lights on at dusk',egg:'Desert night racing. Strategies win here.'},{v:'Turn 4',l:'Overtake heaven'}]},
+  {r:5, name:'Saudi GP',       circuit:'Jeddah Corniche Circuit',       date:'19 Apr 2026',  utc:'2026-04-19T17:00:00Z', facts:[{v:'50 laps',l:'Race distance'},{v:'6.174 km',l:'Longest street circuit',egg:'One mistake and you are in the wall.'},{v:'27 corners',l:'Nonstop'},{v:'322 km/h',l:'Top speed'}]},
+  {r:6, name:'Miami GP',       circuit:'Miami International Autodrome', date:'3 May 2026',   utc:'2026-05-03T20:00:00Z', facts:[{v:'57 laps',l:'Race distance'},{v:'Sprint',l:'Weekend format',egg:'F1 goes full Miami Vice. The racing is good now too.'},{v:'5.412 km',l:'Track length'},{v:'Hard Rock',l:'Iconic backdrop'}]},
+  {r:7, name:'Canadian GP',    circuit:'Circuit Gilles Villeneuve',     date:'24 May 2026',  utc:'2026-05-24T18:00:00Z', facts:[{v:'70 laps',l:'Race distance'},{v:'Wall of Champions',l:'Career ender',egg:'It has eaten better drivers than you.'},{v:'4.361 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
+  {r:8, name:'Monaco GP',      circuit:'Circuit de Monaco',             date:'7 Jun 2026',   utc:'2026-06-07T13:00:00Z', facts:[{v:'78 laps',l:'Race distance'},{v:'3.337 km',l:'Shortest circuit'},{v:'Tunnel',l:'Full throttle darkness',egg:'Monaco. Where overtaking goes to die.'},{v:'No overtaking',l:'Quali is everything'}]},
+  {r:9, name:'Barcelona GP',   circuit:'Circuit de Barcelona-Catalunya',date:'14 Jun 2026',  utc:'2026-06-14T13:00:00Z', facts:[{v:'66 laps',l:'Race distance'},{v:'4.657 km',l:'Track length'},{v:'Turn 3',l:'High speed blast'},{v:'Tyre test',l:'Degrades everything',egg:'Good here = good everywhere.'}]},
+  {r:10,name:'Austrian GP',    circuit:'Red Bull Ring',                 date:'28 Jun 2026',  utc:'2026-06-28T13:00:00Z', facts:[{v:'71 laps',l:'Race distance'},{v:'4.318 km',l:'Track length'},{v:'Sprint',l:'Weekend format'},{v:'Turn 4',l:'Divebomb heaven',egg:'Short lap. Big drama.'}]},
+  {r:11,name:'British GP',     circuit:'Silverstone Circuit',           date:'5 Jul 2026',   utc:'2026-07-05T14:00:00Z', facts:[{v:'52 laps',l:'Race distance'},{v:'Copse',l:'Flat if you dare',egg:'Silverstone in the rain. The most British thing imaginable.'},{v:'5.891 km',l:'Track length'},{v:'Maggotts',l:'Best corner sequence'}]},
+  {r:12,name:'Belgian GP',     circuit:'Circuit de Spa-Francorchamps', date:'19 Jul 2026',  utc:'2026-07-19T13:00:00Z', facts:[{v:'44 laps',l:'Race distance'},{v:'Eau Rouge',l:'The corner',egg:'Eau Rouge flat. This is what F1 is for.'},{v:'7.004 km',l:'Longest circuit'},{v:'Sprint',l:'Weekend format'}]},
+  {r:13,name:'Hungarian GP',   circuit:'Hungaroring',                   date:'26 Jul 2026',  utc:'2026-07-26T13:00:00Z', facts:[{v:'70 laps',l:'Race distance'},{v:'4.381 km',l:'Track length'},{v:'14 corners',l:'Technical'},{v:'Hard to pass',l:'Quali key',egg:'Monaco without the glamour.'}]},
+  {r:14,name:'Dutch GP',       circuit:'Circuit Zandvoort',             date:'23 Aug 2026',  utc:'2026-08-23T13:00:00Z', facts:[{v:'72 laps',l:'Race distance'},{v:'Banked turns',l:'36° camber',egg:'100,000 orange fans. Intimidating for everyone except Max.'},{v:'4.259 km',l:'Track length'},{v:'Sea breeze',l:'Wind changes grip'}]},
+  {r:15,name:'Italian GP',     circuit:'Autodromo Nazionale Monza',     date:'6 Sep 2026',   utc:'2026-09-06T13:00:00Z', facts:[{v:'53 laps',l:'Race distance'},{v:'362 km/h',l:'Top speed',egg:'The Temple of Speed. Engines do not last here.'},{v:'5.793 km',l:'Track length'},{v:'Tifosi',l:'Passionate crowd'}]},
+  {r:16,name:'Madrid GP',      circuit:'IFEMA Madrid Circuit',          date:'13 Sep 2026',  utc:'2026-09-13T13:00:00Z', facts:[{v:'TBC laps',l:'Race distance'},{v:'New for 2026',l:'Brand new circuit',egg:'Zero history. Everything to play for.'},{v:'Sprint',l:'Weekend format'},{v:'Hot & dry',l:'Spain in September'}]},
+  {r:17,name:'Azerbaijan GP',  circuit:'Baku City Circuit',             date:'26 Sep 2026',  utc:'2026-09-26T11:00:00Z', facts:[{v:'51 laps',l:'Race distance'},{v:'6.003 km',l:'Track length'},{v:'Walls everywhere',l:'No run-off',egg:'Always chaotic. Never boring.'},{v:'340 km/h',l:'Longest straight'}]},
+  {r:18,name:'Singapore GP',   circuit:'Marina Bay Street Circuit',     date:'11 Oct 2026',  utc:'2026-10-11T12:00:00Z', facts:[{v:'62 laps',l:'Race distance'},{v:'Night race',l:'Under the lights',egg:'Humid, physical, relentless. Hardest race of the year.'},{v:'5.063 km',l:'Track length'},{v:'23 corners',l:'Zero rest'}]},
+  {r:19,name:'US GP',          circuit:'Circuit of the Americas',       date:'25 Oct 2026',  utc:'2026-10-25T19:00:00Z', facts:[{v:'56 laps',l:'Race distance'},{v:'Turn 1',l:'Uphill blind entry',egg:'COTA Turn 1. You either commit or you do not.'},{v:'5.513 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
+  {r:20,name:'Mexico GP',      circuit:'Autodromo Hermanos Rodriguez',  date:'1 Nov 2026',   utc:'2026-11-01T20:00:00Z', facts:[{v:'71 laps',l:'Race distance'},{v:'2,285m',l:'Altitude',egg:'2285 metres up. Engines lose 25% power.'},{v:'4.304 km',l:'Track length'},{v:'Stadium sector',l:'Best atmosphere'}]},
+  {r:21,name:'São Paulo GP',   circuit:'Autodromo Jose Carlos Pace',    date:'8 Nov 2026',   utc:'2026-11-08T18:00:00Z', facts:[{v:'71 laps',l:'Race distance'},{v:'Interlagos',l:'Iconic venue',egg:'Where legends are made and championships decided.'},{v:'4.309 km',l:'Track length'},{v:'Sprint',l:'Weekend format'}]},
+  {r:22,name:'Las Vegas GP',   circuit:'Las Vegas Strip Circuit',       date:'21 Nov 2026',  utc:'2026-11-22T06:00:00Z', facts:[{v:'50 laps',l:'Race distance'},{v:'The Strip',l:'5km straight',egg:'Racing past casinos at 3am. Only in F1.'},{v:'6.201 km',l:'Track length'},{v:'Night race',l:'Neon everywhere'}]},
+  {r:23,name:'Qatar GP',       circuit:'Lusail International Circuit',  date:'29 Nov 2026',  utc:'2026-11-29T17:00:00Z', facts:[{v:'57 laps',l:'Race distance'},{v:'5.380 km',l:'Track length'},{v:'Sprint',l:'Weekend format'},{v:'Tyre killer',l:'Degrades fast',egg:'Qatar destroys tyres. Strategy calls every 10 laps.'}]},
+  {r:24,name:'Abu Dhabi GP',   circuit:'Yas Marina Circuit',            date:'6 Dec 2026',   utc:'2026-12-06T13:00:00Z', facts:[{v:'58 laps',l:'Race distance'},{v:'Sunset start',l:'Day to night',egg:'The final race. Championships sealed. Tears guaranteed.'},{v:'5.281 km',l:'Track length'},{v:'Season finale',l:'All or nothing'}]},
 ];
-const DRIVERS=[{n:'Russell',t:'Mercedes',p:51},{n:'Antonelli',t:'Mercedes',p:47},{n:'Leclerc',t:'Ferrari',p:34},{n:'Hamilton',t:'Ferrari',p:33},{n:'Bearman',t:'Haas',p:17},{n:'Norris',t:'McLaren',p:15}];
-const TEAMS=[{n:'Mercedes',p:98},{n:'Ferrari',p:67},{n:'McLaren',p:18},{n:'Haas',p:17},{n:'Alpine',p:9}];
+
+// ── SEED DATA (used until races.json is loaded) ──────────────
+const SEED_RACES=[
+  {round:1,name:'Australian GP',circuit:'Albert Park',date:'8 Mar 2026',p1:{name:'Russell',team:'Mercedes'},p1c:'#00D2BE',p2:{name:'Leclerc',team:'Ferrari',delta:'+3.4s'},p3:{name:'Antonelli',team:'Mercedes',delta:'+7.1s'},rest:'4. Norris · 5. Verstappen · 6. Hamilton · DNF: Bearman (brakes)',note:'Russell opened 2026 from pole. Leclerc split the Mercedes. Hamilton P6 — still finding his feet in red.',egg:'Back-to-back poles to open the season. George Russell is in a different gear.'},
+  {round:2,name:'Chinese GP',circuit:'Shanghai',date:'15 Mar 2026',p1:{name:'Antonelli',team:'Mercedes'},p1c:'#00D2BE',p2:{name:'Russell',team:'Mercedes',delta:'+0.672s'},p3:{name:'Hamilton',team:'Ferrari',delta:'+5.1s'},rest:'4. Leclerc · 5. Bearman · 6. Norris · DNF: Both McLarens',note:"Antonelli pole to win — 2nd youngest winner ever. Hamilton's first Ferrari podium in 26 starts.",egg:"Kid's not here to make up the numbers. Kimi Antonelli just announced himself."},
+];
+const SEED_DRIVERS=[{name:'Russell',team:'Mercedes',points:51},{name:'Antonelli',team:'Mercedes',points:47},{name:'Leclerc',team:'Ferrari',points:34},{name:'Hamilton',team:'Ferrari',points:33},{name:'Bearman',team:'Haas',points:17}];
+const SEED_TEAMS=[{name:'Mercedes',points:98},{name:'Ferrari',points:67},{name:'McLaren',points:18},{name:'Haas',points:17},{name:'Alpine',points:9}];
+
 const TICKS=[
-  {t:'Verstappen — P8 in standings. Zero podiums. Red Bull adrift.',hot:false},
+  {t:'Verstappen — P8. Zero podiums. Red Bull adrift.',hot:false},
   {t:'Hamilton waited 26 races for a Ferrari podium.',hot:true},
   {t:'McLaren double DNF in China. Defending champions.',hot:true},
   {t:'Antonelli: 2nd youngest race winner ever.',hot:false},
@@ -281,162 +382,188 @@ const TICKS=[
   {t:'Russell won from pole in both races so far.',hot:false},
 ];
 
+// ── INIT ─────────────────────────────────────────────────────
 async function init(){
-  let races=[];
-  try{const r=await fetch('races.json?'+Date.now());if(r.ok)races=await r.json();}catch(e){}
-  if(!races.length){document.getElementById('p-eye').textContent='Season loading...';buildTickers();renderNextRace();renderDrivers();renderTeams();return;}
+  let races=SEED_RACES, drivers=SEED_DRIVERS, teams=SEED_TEAMS;
+  try{
+    const r=await fetch('races.json?'+Date.now());
+    if(r.ok){
+      const data=await r.json();
+      if(data.races&&data.races.length) races=data.races;
+      if(data.drivers&&data.drivers.length) drivers=data.drivers;
+      if(data.teams&&data.teams.length) teams=data.teams;
+    }
+  }catch(e){}
+
   const latest=races[races.length-1];
-  renderPodium(latest);renderHistory(races);renderNextRace();renderDrivers();renderTeams();buildTickers();
-  document.getElementById('round-badge').textContent=`Rd ${latest.round} of 24`;
+  if(latest) renderPodium(latest);
+  renderHistory(races);
+  renderNextRace();
+  renderDrivers(drivers);
+  renderTeams(teams);
+  buildTickers();
+
+  const lastRound=latest?(latest.round||latest.r||races.length):races.length;
+  document.getElementById('rbadge').textContent=`Race ${lastRound} of 24`;
 }
 
+// ── PODIUM ───────────────────────────────────────────────────
 function renderPodium(r){
-  document.getElementById('p-eye').textContent=`${r.name} · Round ${r.round} · Winner`;
-  document.getElementById('p-winner').textContent=r.p1.name;
+  const wc=r.p1c||TC[r.p1.team]||'#FF1801';
+  document.getElementById('p-eye').textContent=`${r.name} · Race ${r.round||r.r} · Winner`;
+  const pw=document.getElementById('p-win');
+  pw.textContent=r.p1.name||r.p1;pw.style.color=wc;
   document.getElementById('p-sub').innerHTML=r.note||'';
-  document.getElementById('eg-win').textContent=r.egg||'';
-  document.getElementById('p2-name').textContent=r.p2.name;
-  document.getElementById('p2-dot').style.background=TC[r.p2.team]||'#888';
-  document.getElementById('p2-team').textContent=r.p2.team;
-  document.getElementById('p2-val').innerHTML=`${r.p2.delta}<small>P2</small>`;
-  document.getElementById('p3-name').textContent=r.p3.name;
-  document.getElementById('p3-dot').style.background=TC[r.p3.team]||'#888';
-  document.getElementById('p3-team').textContent=r.p3.team;
-  document.getElementById('p3-val').innerHTML=`${r.p3.delta}<small>P3</small>`;
-  document.getElementById('p-rest').textContent=r.rest;
+  document.getElementById('ew').textContent=r.egg||'';
+  const p2n=r.p2.name||r.p2,p2t=r.p2.team||r.p2t||'',p2d=r.p2.delta||r.p2d||'';
+  document.getElementById('p2n').textContent=p2n;
+  document.getElementById('p2dot').style.background=TC[p2t]||'#888';
+  document.getElementById('p2t').textContent=p2t;
+  document.getElementById('p2v').innerHTML=`${p2d}<small>P2</small>`;
+  const p3n=r.p3.name||r.p3,p3t=r.p3.team||r.p3t||'',p3d=r.p3.delta||r.p3d||'';
+  document.getElementById('p3n').textContent=p3n;
+  document.getElementById('p3dot').style.background=TC[p3t]||'#888';
+  document.getElementById('p3t').textContent=p3t;
+  document.getElementById('p3v').innerHTML=`${p3d}<small>P3</small>`;
+  document.getElementById('p-rest').textContent=r.rest||'';
 }
 
+// ── HISTORY ──────────────────────────────────────────────────
 function renderHistory(races){
-  const el=document.getElementById('hist-list');
-  const sorted=[...races].reverse();
-  el.innerHTML=sorted.map((r,i)=>`
-    <div class="hist-card" onclick="toggleCard('hd-${i}')">
-      <div class="hist-top">
-        <div class="hist-round">R${r.round}</div>
-        <div style="flex:1"><div class="hist-gp">${r.name}</div><div class="hist-date-txt">${r.circuit} · ${r.date}</div></div>
-        <div class="hist-winner">${r.p1.name}</div>
-      </div>
-      <div class="hist-detail" id="hd-${i}">
-        <div class="hist-podium">
-          <div class="hist-p"><b style="color:var(--red)">${r.p1.name}</b>P1 · Winner</div>
-          <div class="hist-p"><b>${r.p2.name}</b>P2 · ${r.p2.delta||''}</div>
-          <div class="hist-p"><b>${r.p3.name}</b>P3 · ${r.p3.delta||''}</div>
-        </div>
-        <div class="hist-rest-txt">${r.rest}</div>
-        ${r.note?`<div class="hist-note">${r.note}</div>`:''}
-      </div>
-    </div>`).join('');
-  document.getElementById('race-count').textContent=`${races.length} races`;
+  const doneMap={};
+  races.forEach(r=>{doneMap[r.round||r.r]=r;});
+  document.getElementById('hist-list').innerHTML=ALL_RACES.map((tmpl,i)=>{
+    const r=doneMap[tmpl.r];
+    const done=!!r;
+    const wc=done?(r.p1c||TC[r.p1.team]||'#FF1801'):'';
+    const wn=done?(r.p1.name||r.p1):'TBD';
+    const p2n=done?(r.p2.name||r.p2):'';
+    const p2d=done?(r.p2.delta||r.p2d||''):'';
+    const p3n=done?(r.p3.name||r.p3):'';
+    const p3d=done?(r.p3.delta||r.p3d||''):'';
+    return`<div class="hcard${done?'':' future'}" ${done?`onclick="tc('hd${i}')"`:''}> 
+      <div class="htop"><div class="hrnd">R${tmpl.r}</div><div style="flex:1"><div class="hgp">${tmpl.name}</div><div class="hdate">${tmpl.circuit} · ${tmpl.date}</div></div>
+      <div class="hwinner${done?'':' tbd'}" ${done&&wc?`style="color:${wc}"`:''}>${wn}</div></div>
+      ${done?`<div class="hdetail" id="hd${i}"><div class="hpod"><div class="hp"><b style="color:${wc}">${wn}</b>P1</div><div class="hp"><b>${p2n}</b>P2 · ${p2d}</div><div class="hp"><b>${p3n}</b>P3 · ${p3d}</div></div><div class="hrest">${r.rest||''}</div>${r.note?`<div class="hnote">${r.note}</div>`:''}</div>`:''}
+    </div>`;
+  }).join('');
 }
 
-function toggleCard(id){const d=document.getElementById(id);d.style.display=d.style.display==='block'?'none':'block';}
+function tc(id){const d=document.getElementById(id);if(d)d.style.display=d.style.display==='block'?'none':'block';}
 
+// ── NEXT RACE ────────────────────────────────────────────────
 function renderNextRace(){
   const now=new Date();
-  const next=NEXT_RACES.find(r=>new Date(r.utc)>now)||NEXT_RACES[NEXT_RACES.length-1];
-  document.getElementById('nr-eye').textContent=`${next.name} · ${next.circuit} · ${next.date}`;
-  document.getElementById('nr-facts').innerHTML=next.facts.map(f=>`
-    <div class="nr-fact" ${f.egg?`onclick="showNrEgg('${f.egg.replace(/'/g,"&#39;")}')"`:''}>
-      <div class="nr-val">${f.v}</div><div class="nr-lbl">${f.l}</div>
-    </div>`).join('');
+  const next=ALL_RACES.find(r=>r.utc&&new Date(r.utc)>now)||ALL_RACES[ALL_RACES.length-1];
+  document.getElementById('nr-name').textContent=next.name;
+  document.getElementById('nr-meta').textContent=`${next.circuit} · ${next.date}`;
+  const eggFact=next.facts?next.facts.find(f=>f.egg):null;
+  if(eggFact)document.getElementById('enr').textContent=eggFact.egg;
+  if(next.facts){
+    document.getElementById('nr-right').innerHTML=`
+      <div class="facts">${next.facts.map(f=>`<div class="fact"${f.egg?` onclick="showEgg('enr')"`:''}><div class="fv">${f.v}</div><div class="fl">${f.l}</div></div>`).join('')}</div>
+      <div class="tyres">
+        <div class="tyre S" onclick="quip('Softs: fast, dramatic, gone in 10 laps.')">S</div>
+        <div class="tyre M" onclick="quip('Mediums: the sensible choice nobody admits to liking.')">M</div>
+        <div class="tyre H" onclick="quip('Hards: indestructible. Also joyless.')">H</div>
+      </div>
+      <div class="tquip" id="tquip"></div>`;
+  }
   if(window._cdTimer)clearInterval(window._cdTimer);
-  const rt=new Date(next.utc);
+  const rt=new Date(next.utc||'2099-01-01');
   function tick(){
     const d=rt-new Date();if(d<=0){renderNextRace();return;}
-    document.getElementById('cd-d').textContent=String(Math.floor(d/864e5)).padStart(2,'0');
-    document.getElementById('cd-h').textContent=String(Math.floor(d%864e5/36e5)).padStart(2,'0');
-    document.getElementById('cd-m').textContent=String(Math.floor(d%36e5/6e4)).padStart(2,'0');
-    document.getElementById('cd-s').textContent=String(Math.floor(d%6e4/1e3)).padStart(2,'0');
+    const v=[Math.floor(d/864e5),Math.floor(d%864e5/36e5),Math.floor(d%36e5/6e4),Math.floor(d%6e4/1e3)];
+    ['cd-d','cd-h','cd-m','cd-s'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=String(v[i]).padStart(2,'0');});
   }
   tick();window._cdTimer=setInterval(tick,1000);
 }
 
-function showNrEgg(msg){
-  const el=document.getElementById('eg-nr');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(window._nrT);window._nrT=setTimeout(()=>el.classList.remove('show'),3000);
+// ── DRIVERS ──────────────────────────────────────────────────
+function renderDrivers(drivers){
+  const leader=drivers[0];
+  const lc=TC[leader.team]||'#FF1801';
+  const box=document.getElementById('d-box');
+  box.style.border=`1.5px solid ${lc}`;
+  document.getElementById('d-lname').textContent=leader.name;
+  document.getElementById('d-lteam').innerHTML=`<span class="tdot" style="background:${lc}"></span>${leader.team}`;
+  document.getElementById('d-lpts').innerHTML=`<span style="color:${lc}">${leader.points}</span> <span>pts</span>`;
+  document.getElementById('edrv').textContent='Beating your teammate is the first war.';
+  const lStyle=document.getElementById('d-leader-style')||document.createElement('style');
+  lStyle.id='d-leader-style';
+  lStyle.textContent=`#d-box::before{content:'LEADER';font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:9px;letter-spacing:2px;color:${lc};position:absolute;top:0;left:12px;background:var(--bg);padding:0 5px;transform:translateY(-50%);transition:background .25s}`;
+  document.head.appendChild(lStyle);
+  document.getElementById('dlist').innerHTML=drivers.slice(1).map((x,i)=>`
+    <div class="sitem"><div class="srank">${String(i+2).padStart(2,'0')}</div>
+    <div class="si"><div class="sn">${x.name}</div><div class="st"><span class="tdot" style="background:${TC[x.team]||'#888'}"></span>${x.team}</div><div class="str"><div class="strf" style="width:${Math.round(x.points/leader.points*100)}%;background:${TC[x.team]||'#888'}"></div></div></div>
+    <div class="sr"><div class="sp">${x.points}</div><div class="sl">PTS</div><div class="sg">–${leader.points-x.points}</div></div></div>`).join('');
 }
 
-function renderDrivers(){
-  const max=DRIVERS[0].p;
-  document.getElementById('d-pts').textContent=`${DRIVERS[0].p} pts`;
-  document.getElementById('d-sub').innerHTML=`<b>${DRIVERS[0].n}</b> · ${DRIVERS[0].t} · ${DRIVERS[0].p-DRIVERS[1].p} pts clear of ${DRIVERS[1].n}`;
-  document.getElementById('dlist').innerHTML=DRIVERS.map((x,i)=>`
-    <div class="stand-item">
-      <div class="srank${i===0?' g':''}">${String(i+1).padStart(2,'0')}</div>
-      <div class="sinfo">
-        <div class="sname">${x.n}</div>
-        <div class="steam"><span class="tdot" style="background:${TC[x.t]||'#888'}"></span>${x.t}</div>
-        <div class="strack"><div class="strack-fill" style="width:${Math.round(x.p/max*100)}%;background:${TC[x.t]||'#888'}"></div></div>
-      </div>
-      <div class="sright"><div class="spts">${x.p}</div><div class="spts-lbl">PTS</div>${i>0?`<div class="sgap">–${DRIVERS[0].p-x.p}</div>`:''}</div>
-    </div>`).join('');
+// ── TEAMS ────────────────────────────────────────────────────
+function renderTeams(teams){
+  const leader=teams[0];
+  const lc=TC[leader.name]||'#FF1801';
+  const box=document.getElementById('t-box');
+  box.style.border=`1.5px solid ${lc}`;
+  document.getElementById('t-lname').textContent=leader.name;
+  document.getElementById('t-lpts').innerHTML=`<span style="color:${lc}">${leader.points}</span> <span>pts</span>`;
+  document.getElementById('ector').textContent='The Silver Arrows are back. And they brought both drivers.';
+  const tStyle=document.getElementById('t-leader-style')||document.createElement('style');
+  tStyle.id='t-leader-style';
+  tStyle.textContent=`#t-box::before{content:'LEADER';font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:9px;letter-spacing:2px;color:${lc};position:absolute;top:0;left:12px;background:var(--bg);padding:0 5px;transform:translateY(-50%);transition:background .25s}`;
+  document.head.appendChild(tStyle);
+  document.getElementById('tlist').innerHTML=teams.slice(1).map((x,i)=>`
+    <div class="sitem"><div class="srank">${String(i+2).padStart(2,'0')}</div>
+    <div class="si"><div class="sn">${x.name}</div><div class="str"><div class="strf" style="width:${Math.round(x.points/leader.points*100)}%;background:${TC[x.name]||'#888'}"></div></div></div>
+    <div class="sr"><div class="sp">${x.points}</div><div class="sl">PTS</div><div class="sg">–${leader.points-x.points}</div></div></div>`).join('');
 }
 
-function renderTeams(){
-  const max=TEAMS[0].p;
-  document.getElementById('t-pts').textContent=`${TEAMS[0].p} pts`;
-  document.getElementById('t-sub').innerHTML=`<b>${TEAMS[0].n}</b> · ${TEAMS[0].p-TEAMS[1].p} pts clear of ${TEAMS[1].n}`;
-  document.getElementById('tlist').innerHTML=TEAMS.map((x,i)=>`
-    <div class="stand-item">
-      <div class="srank${i===0?' g':''}">${String(i+1).padStart(2,'0')}</div>
-      <div class="sinfo">
-        <div class="sname">${x.n}</div>
-        <div class="strack"><div class="strack-fill" style="width:${Math.round(x.p/max*100)}%;background:${TC[x.n]||'#888'}"></div></div>
-      </div>
-      <div class="sright"><div class="spts">${x.p}</div><div class="spts-lbl">PTS</div>${i>0?`<div class="sgap">–${TEAMS[0].p-x.p}</div>`:''}</div>
-    </div>`).join('');
-}
-
+// ── TICKERS ──────────────────────────────────────────────────
 function buildTickers(){
-  ['t1','t2','t3','t4','t5'].forEach(id=>{
-    const all=[...TICKS,...TICKS];
-    document.getElementById(id).innerHTML=all.map(x=>`<span class="tick${x.hot?' hot':''}">${x.t}</span>`).join('');
-  });
+  const th=TICKS.map(x=>`<span class="tick${x.hot?' hot':''}">${x.t}</span>`).join('');
+  ['tk1','tk2','tk3','tk4','tk5'].forEach(id=>{document.getElementById(id).innerHTML=th+th;});
 }
 
+// ── UI ───────────────────────────────────────────────────────
+const PANELS=['pod','hist','nr','drv','ctor'];
 function sw(id,tab){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById(id).classList.add('on');tab.classList.add('on');
+  document.getElementById(id).classList.add('on');if(tab)tab.classList.add('on');
 }
-
-const eggTimers={};
-function egg(id){
-  const el=document.getElementById(id);if(!el)return;
-  const on=el.classList.contains('show');
-  el.classList.toggle('show',!on);
-  if(!on){clearTimeout(eggTimers[id]);eggTimers[id]=setTimeout(()=>el.classList.remove('show'),3200);}
+function openMenu(){document.getElementById('mob-menu').classList.add('open')}
+function closeMenu(){document.getElementById('mob-menu').classList.remove('open')}
+function mobSw(id,tab){
+  const idx=PANELS.indexOf(id);
+  const dTabs=document.querySelectorAll('.tab');
+  dTabs.forEach(t=>t.classList.remove('on'));
+  if(dTabs[idx])dTabs[idx].classList.add('on');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('on'));
+  tab.classList.add('on');closeMenu();
 }
-
+const eggT={};
+function egg(id){const el=document.getElementById(id);if(!el)return;const on=el.classList.contains('show');el.classList.toggle('show',!on);if(!on){clearTimeout(eggT[id]);eggT[id]=setTimeout(()=>el.classList.remove('show'),3000);}}
+function showEgg(id){const el=document.getElementById(id);if(!el)return;el.classList.add('show');clearTimeout(eggT[id]);eggT[id]=setTimeout(()=>el.classList.remove('show'),3000);}
 let qt;
-function quip(msg){
-  const el=document.getElementById('tquip');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(qt);qt=setTimeout(()=>el.classList.remove('show'),2800);
-}
+function quip(msg){const el=document.getElementById('tquip');if(!el)return;el.textContent=msg;el.classList.add('show');clearTimeout(qt);qt=setTimeout(()=>el.classList.remove('show'),2800);}
 
-let dark=false;
-document.getElementById('mode-toggle').addEventListener('click',()=>{
-  dark=!dark;
-  document.getElementById('shell').classList.toggle('dark',dark);
-  try{localStorage.setItem('f1pit-dark',dark?'1':'0');}catch(e){}
+let light=false;
+document.getElementById('mt').addEventListener('click',()=>{
+  light=!light;
+  document.getElementById('shell').classList.toggle('light',light);
+  document.getElementById('mob-menu').classList.toggle('light',light);
+  try{localStorage.setItem('f1pit-light',light?'1':'0');}catch(e){}
 });
-try{if(localStorage.getItem('f1pit-dark')==='1'){dark=true;document.getElementById('shell').classList.add('dark');}}catch(e){}
+try{if(localStorage.getItem('f1pit-light')==='1'){light=true;document.getElementById('shell').classList.add('light');document.getElementById('mob-menu').classList.add('light');}}catch(e){}
 
 let ltaps=0,ltimer;
-document.getElementById('logo-tap').addEventListener('click',()=>{
-  ltaps++;clearTimeout(ltimer);
-  ltimer=setTimeout(()=>ltaps=0,1500);
-  if(ltaps>=5){ltaps=0;quip('Michael Schumacher. Still the benchmark. Always.');}
-});
+document.getElementById('logo-tap').addEventListener('click',()=>{ltaps++;clearTimeout(ltimer);ltimer=setTimeout(()=>ltaps=0,1500);if(ltaps>=5){ltaps=0;quip('Michael Schumacher. Still the benchmark. Always.');}});
 
 let kseq=[];
 const kcode=[38,38,40,40,37,39,37,39,66,65];
-document.addEventListener('keydown',e=>{
-  kseq.push(e.keyCode);kseq=kseq.slice(-10);
-  if(kseq.join()===kcode.join())quip('LIGHTS OUT AND AWAY WE GO');
-});
+document.addEventListener('keydown',e=>{kseq.push(e.keyCode);kseq=kseq.slice(-10);if(kseq.join()===kcode.join())quip('LIGHTS OUT AND AWAY WE GO');});
 
 init();
 </script>

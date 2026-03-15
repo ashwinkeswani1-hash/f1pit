@@ -1,0 +1,57 @@
+name: Update Race Results
+
+on:
+  schedule:
+    - cron: '20 6 8 3 *'
+    - cron: '20 9 15 3 *'
+    - cron: '20 7 29 3 *'
+    - cron: '20 17 12 4 *'
+    - cron: '20 19 19 4 *'
+    - cron: '20 22 3 5 *'
+    - cron: '20 20 24 5 *'
+    - cron: '20 15 7 6 *'
+    - cron: '20 15 14 6 *'
+    - cron: '20 15 28 6 *'
+    - cron: '20 16 5 7 *'
+    - cron: '20 15 19 7 *'
+    - cron: '20 15 26 7 *'
+    - cron: '20 15 23 8 *'
+    - cron: '20 15 6 9 *'
+    - cron: '20 15 13 9 *'
+    - cron: '20 13 26 9 *'
+    - cron: '20 14 11 10 *'
+    - cron: '20 21 25 10 *'
+    - cron: '20 22 1 11 *'
+    - cron: '20 20 8 11 *'
+    - cron: '20 8 22 11 *'
+    - cron: '20 19 29 11 *'
+    - cron: '20 15 6 12 *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch race results and generate commentary
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node fetch-results.js
+
+      - name: Commit updated races.json
+        run: |
+          git config user.name "f1pit-bot"
+          git config user.email "bot@f1pit.live"
+          git add races.json
+          git diff --staged --quiet || git commit -m "race result: $(date +'%d %b %Y')"
+          git push

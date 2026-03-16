@@ -163,76 +163,120 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
 .cbubble p{font-size:11px;color:var(--dim);line-height:1.6;font-weight:300;user-select:text;transition:color .25s}
 .cbubble p b{color:var(--ink);font-weight:400;display:block;margin-top:4px;user-select:text;transition:color .25s}
 
-/* RESPONSIVE */
+/* RESPONSIVE — tablet */
 @media(max-width:1199px){
   .ti,.foot-i,.results-wrap{padding-left:32px;padding-right:32px}
   .wrap{padding:0 32px}
   .two-col{gap:48px}
   .nr-body{gap:40px}
 }
+
+/* ═══════════════════════════════════════════
+   MOBILE — purpose-built full-screen layout
+   Each tab fills 100% of available height
+   No awkward gaps anywhere
+═══════════════════════════════════════════ */
 @media(max-width:767px){
   .burger{display:flex}
   .tabs{display:none}
   .ti{padding:0 16px;height:48px}
-  /* All zones strictly clipped — no scroll */
-  .zone{overflow:hidden;align-items:flex-start}
-  .wrap{padding:12px 16px}
-  .two-col{grid-template-columns:1fr;gap:10px}
-  .nr-body{grid-template-columns:1fr;gap:10px}
-  .nr-header{margin-bottom:10px;text-align:center}
-  /* Hero — compact */
-  .hero-eye{font-size:10px;margin-bottom:3px;letter-spacing:2px}
-  .hero-num{font-size:clamp(40px,12vw,58px);line-height:.88}
-  .hero-sub{max-width:100%;font-size:12px;margin-top:6px;line-height:1.4}
-  .egg{font-size:11px}
-  /* Podium list — compact */
-  .mrow{padding:8px 0}
-  .mn{font-size:clamp(20px,5.5vw,28px)}
-  .mteam{font-size:10px;margin-top:1px}
-  .tdot{width:5px;height:5px}
-  .mv{font-size:clamp(14px,4vw,20px)}
-  .mv small{font-size:9px}
-  .rest{font-size:11px;padding-top:6px;line-height:1.6}
-  /* Next race — compact */
-  .nr-name{font-size:clamp(24px,7vw,38px)}
-  .nr-meta{font-size:10px;margin-top:3px}
-  .cd-label,.facts-label{font-size:10px;margin-bottom:6px}
-  .cd-blocks{gap:4px}
-  .cd-block{padding:8px 4px 6px;border-radius:6px}
-  .cd-n{font-size:clamp(20px,6vw,32px)}
-  .cd-l{font-size:8px;margin-top:2px}
-  .facts{gap:5px}
-  .fact{padding:10px 8px;border-radius:6px}
-  .fv{font-size:14px}
-  .fl{font-size:9px;margin-top:3px}
-  /* Standings — compact */
-  .leader-box{padding:12px 14px}
-  .leader-name{font-size:clamp(32px,9vw,46px)}
-  .leader-team{font-size:12px;margin-top:5px}
-  .leader-pts{font-size:clamp(28px,8vw,40px);margin-top:5px}
-  .leader-pts span{font-size:15px}
-  .sitem{padding:7px 0}
-  .srank{font-size:11px}
-  .sn{font-size:clamp(16px,4.5vw,22px)}
-  .st{font-size:10px;margin-top:1px}
-  .str{margin-top:4px}
-  .sp{font-size:clamp(18px,5vw,24px)}
-  .sl{font-size:9px}
-  .sg{font-size:10px}
-  /* Results — ONLY tab that scrolls */
-  #hist .results-zone{overflow-y:auto}
-  .results-wrap{padding:10px 16px}
-  .hcard{padding:10px 12px}
-  .hgp{font-size:15px}
-  .hdate{font-size:10px}
-  .hwinner{font-size:13px}
-  /* Footer */
-  .foot-i{padding:7px 16px}
-  .ftxt{font-size:9px}
+  .foot-i{padding:8px 16px}
+  .ftxt{font-size:10px}
   .cname{font-size:10px}
-  /* Ticker */
-  .ticker-wrap{height:24px}
-  .tick{font-size:10px;padding-right:32px}
+  .ticker-wrap{height:24px;flex-shrink:0}
+  .tick{font-size:10px;padding-right:28px}
+
+  /* Shell fills exact viewport — no body scroll ever */
+  .shell{height:100dvh;overflow:hidden}
+
+  /* Every panel is full-height flex column */
+  .panel{overflow:hidden}
+  .panel.on{display:flex;flex-direction:column;flex:1}
+
+  /* ── PODIUM ── */
+  #pod .zone{display:flex;flex-direction:column;align-items:stretch;padding:16px 16px 0;overflow:hidden;flex:1}
+  #pod .wrap{padding:0;display:flex;flex-direction:column;flex:1}
+  #pod .two-col{display:flex;flex-direction:column;flex:1;gap:0}
+  /* Left: hero fills top portion */
+  #pod .two-col > div:first-child{flex:0 0 auto;padding-bottom:12px;cursor:pointer}
+  .hero-eye{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:4px}
+  .hero-num{font-size:clamp(44px,13vw,64px);line-height:.88}
+  .hero-sub{font-size:13px;margin-top:8px;line-height:1.5;color:var(--dim);max-width:100%}
+  .egg{font-size:11px}
+  /* Right: P2/P3 list stretches to fill remaining space */
+  #pod .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .mlist{border-top:0.5px solid var(--line)}
+  .mrow{padding:0;flex:1;display:flex;align-items:center;gap:12px;min-height:0;border-bottom:0.5px solid var(--line)}
+  .mrow:last-child{border:none}
+  .mpos{font-size:12px;width:24px}
+  .mn{font-size:clamp(22px,6vw,32px)}
+  .mteam{font-size:11px;margin-top:2px}
+  .tdot{width:5px;height:5px}
+  .mv{font-size:clamp(16px,4.5vw,22px)}
+  .mv small{font-size:10px;margin-top:2px}
+  .rest{font-size:12px;padding:10px 0 0;line-height:1.7;flex-shrink:0;color:var(--dim)}
+
+  /* ── RESULTS — only scrollable tab ── */
+  #hist .zone{display:flex;flex-direction:column;flex:1;padding:0;overflow:hidden}
+  #hist .results-zone{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .results-wrap{padding:10px 16px}
+  .hist-list{gap:4px}
+  .hcard{padding:12px 14px}
+  .hgp{font-size:16px}
+  .hdate{font-size:11px;color:var(--dim)}
+  .hwinner{font-size:14px}
+  .hrnd{font-size:11px;color:var(--dim)}
+
+  /* ── NEXT RACE ── */
+  #nr .zone{display:flex;flex-direction:column;flex:1;padding:16px 16px 0;overflow:hidden}
+  #nr .wrap{padding:0;display:flex;flex-direction:column;flex:1}
+  .nr-header{text-align:center;flex-shrink:0;margin-bottom:0;padding-bottom:12px}
+  .nr-name{font-size:clamp(28px,8vw,44px);line-height:1}
+  .nr-meta{font-size:11px;letter-spacing:2px;margin-top:4px;color:var(--dim)}
+  /* Body fills remaining space — two sections stack and share height */
+  .nr-body{display:flex;flex-direction:column;flex:1;gap:0}
+  .nr-body > div:first-child{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .nr-body > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .cd-label,.facts-label{font-size:10px;letter-spacing:2px;margin-bottom:8px;color:var(--dim)}
+  /* Countdown 2x2 grid */
+  .cd-blocks{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;flex:1}
+  .cd-block{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
+  .cd-n{font-size:clamp(28px,9vw,44px);line-height:1}
+  .cd-l{font-size:9px;letter-spacing:2px;margin-top:4px;color:var(--dim)}
+  .nr-egg{font-size:12px;margin-top:8px;min-height:16px}
+  /* Facts 2x2 grid */
+  .facts{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;flex:1;margin-bottom:0}
+  .fact{background:var(--surf);border:0.5px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
+  .fv{font-size:clamp(16px,5vw,22px);line-height:1}
+  .fl{font-size:9px;letter-spacing:1.5px;margin-top:4px;color:var(--dim)}
+
+  /* ── DRIVERS ── */
+  #drv .zone{display:flex;flex-direction:column;flex:1;padding:12px 16px 0;overflow:hidden}
+  #drv .wrap{padding:0;display:flex;flex-direction:column;flex:1}
+  #drv .two-col{display:flex;flex-direction:column;flex:1;gap:0}
+  #drv .two-col > div:first-child{flex:0 0 auto}
+  #drv .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .leader-box{padding:14px 16px;margin-bottom:8px}
+  .leader-name{font-size:clamp(34px,10vw,48px);line-height:.92}
+  .leader-team{font-size:13px;margin-top:6px}
+  .leader-pts{font-size:clamp(30px,9vw,42px);margin-top:6px}
+  .leader-pts span{font-size:16px}
+  .sitem{padding:0;flex:1;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--line);min-height:0}
+  .sitem:last-child{border:none}
+  .srank{font-size:12px;width:24px;color:var(--dim)}
+  .sn{font-size:clamp(18px,5vw,26px);line-height:1}
+  .st{font-size:11px;margin-top:2px;color:var(--dim)}
+  .str{margin-top:4px;height:2px}
+  .sp{font-size:clamp(20px,5.5vw,28px)}
+  .sl{font-size:10px;color:var(--dim)}
+  .sg{font-size:11px;color:var(--dim)}
+
+  /* ── CONSTRUCTORS ── */
+  #ctor .zone{display:flex;flex-direction:column;flex:1;padding:12px 16px 0;overflow:hidden}
+  #ctor .wrap{padding:0;display:flex;flex-direction:column;flex:1}
+  #ctor .two-col{display:flex;flex-direction:column;flex:1;gap:0}
+  #ctor .two-col > div:first-child{flex:0 0 auto}
+  #ctor .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
 }
 </style>
 </head>

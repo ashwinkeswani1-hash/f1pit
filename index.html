@@ -157,10 +157,10 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
 .ftxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase;transition:color .25s}
 /* Fix hover gap so email bubble stays when cursor moves into it */
 .cwrap{position:relative;padding-bottom:14px;margin-bottom:-14px}
-.cname{font-size:11px;font-weight:400;color:var(--dim);cursor:default;user-select:none;transition:color .15s}
-.cwrap:hover .cname{color:var(--red)}
+.cname{font-size:11px;font-weight:400;color:var(--dim);cursor:pointer;user-select:none;transition:color .15s}
+.cwrap:hover .cname,.cwrap.open .cname{color:var(--red)}
 .cbubble{visibility:hidden;opacity:0;position:absolute;bottom:calc(100% + 4px);right:0;background:var(--surf2);border:0.5px solid var(--line2);border-radius:8px;padding:12px 14px;width:256px;z-index:99;transition:opacity .15s,visibility .15s;pointer-events:none}
-.cwrap:hover .cbubble{visibility:visible;opacity:1;pointer-events:auto}
+.cwrap:hover .cbubble,.cwrap.open .cbubble{visibility:visible;opacity:1;pointer-events:auto}
 .cbubble::after{content:'';position:absolute;bottom:-5px;right:14px;width:8px;height:8px;background:var(--surf2);border-right:0.5px solid var(--line2);border-bottom:0.5px solid var(--line2);transform:rotate(45deg)}
 .cbubble p{font-size:11px;color:var(--dim);line-height:1.6;font-weight:300;user-select:text;transition:color .25s}
 .cbubble p b{color:var(--ink);font-weight:400;display:block;margin-top:4px;user-select:text;transition:color .25s}
@@ -179,11 +179,24 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .foot-i{padding:8px 16px}
   .ftxt{font-size:10px}
   .cname{font-size:10px}
-  .ticker-wrap{display:none}
+  .needle-wrap{display:none!important}
+  .foot{display:none!important}
   .needle-wrap{height:40px;flex-shrink:0}
   .needle-bar{left:16px;height:14px;width:2.5px}
   .needle{left:30px;right:16px;font-size:12px}
   .shell{height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+  /* mob-needle and mob-foot shown instead */
+  .mob-needle-wrap{border-top:0.5px solid var(--line);height:40px;flex-shrink:0;position:relative;overflow:hidden;display:flex;align-items:center;padding:0 16px;gap:10px}
+  .mob-needle-bar{width:2.5px;height:14px;background:var(--red);border-radius:1px;flex-shrink:0}
+  .mob-needle-text{font-size:12px;font-weight:300;color:var(--ink);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0;transition:opacity .8s ease;position:absolute;left:30px;right:16px}
+  .mob-needle-text.show{opacity:1}
+  .mob-foot{border-top:0.5px solid var(--line);height:34px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;flex-shrink:0}
+  .mob-ftxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase}
+  .mob-cname{font-size:11px;font-weight:400;color:var(--dim);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .mob-bubble{display:none;position:absolute;bottom:44px;right:16px;background:var(--surf2);border:0.5px solid var(--line2);border-radius:8px;padding:12px 14px;width:240px;z-index:99}
+  .mob-bubble.open{display:block}
+  .mob-bubble p{font-size:11px;color:var(--dim);line-height:1.6;font-weight:300;user-select:text}
+  .mob-bubble p b{color:var(--ink);font-weight:400;display:block;margin-top:4px;user-select:text}
   .zone,.wrap,.two-col,.nr-body,.nr-header{display:none!important}
   .panel{overflow:hidden;flex-direction:column}
   .panel.on{display:flex;flex:1;min-height:0}
@@ -195,51 +208,51 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .hdate{font-size:11px}
   .hwinner{font-size:14px}
   .hrnd{font-size:11px}
-  .mob-page{display:flex;flex-direction:column;flex:1;padding:14px 16px 0;overflow:hidden;min-height:0}
+  .mob-page{display:flex;flex-direction:column;flex:1;padding:16px 16px 0;overflow:hidden;min-height:0}
   .mob-label{font-size:10px;font-weight:300;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;flex-shrink:0}
-  .mob-winner-eye{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
-  .mob-winner-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(52px,15vw,72px);line-height:.88}
-  .mob-winner-note{font-size:13px;font-weight:300;color:var(--dim);margin-top:8px;line-height:1.5}
-  .mob-p23{display:flex;flex-direction:column;flex:1;justify-content:center;border-top:0.5px solid var(--line);margin-top:10px;min-height:0}
-  .mob-prow{display:flex;align-items:center;gap:10px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
+  .mob-winner-eye{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;flex-shrink:0}
+  .mob-winner-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(56px,16vw,80px);line-height:.88;flex-shrink:0}
+  .mob-winner-note{font-size:14px;font-weight:300;color:var(--dim);margin-top:10px;line-height:1.5;flex-shrink:0}
+  .mob-p23{display:flex;flex-direction:column;flex:1;border-top:0.5px solid var(--line);margin-top:14px;min-height:0}
+  .mob-prow{display:flex;align-items:center;gap:12px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
   .mob-prow:last-child{border:none}
-  .mob-ppos{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:12px;color:var(--dim);width:22px;text-align:center}
-  .mob-pname{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(22px,6vw,30px);color:var(--ink);flex:1;line-height:1}
-  .mob-pteam{font-size:11px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:4px;margin-top:2px}
-  .mob-pdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-  .mob-pgap{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(16px,4.5vw,22px);color:var(--ink);text-align:right}
-  .mob-pgap small{font-size:10px;color:var(--dim);font-weight:300;display:block;text-align:right;margin-top:2px}
-  .mob-rest{font-size:12px;color:var(--dim);font-weight:300;padding:10px 0;line-height:1.7;flex-shrink:0}
-  .mob-race-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,9vw,48px);color:var(--ink);text-align:center;line-height:1;flex-shrink:0}
-  .mob-race-meta{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;text-align:center;margin-top:4px;margin-bottom:10px;flex-shrink:0}
-  .mob-cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-height:0}
-  .mob-cd-block{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .mob-cd-n{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,10vw,52px);color:var(--ink);line-height:1}
-  .mob-cd-l{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:5px}
-  .mob-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-height:0}
-  .mob-fact{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .mob-fv{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:var(--ink);line-height:1}
-  .mob-fl{font-size:10px;font-weight:300;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin-top:5px}
-  .mob-spacer{flex:0 0 8px}
-  .mob-leader{border-radius:8px;padding:14px 16px;position:relative;flex-shrink:0;margin-bottom:8px}
-  .mob-leader-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(36px,10vw,52px);color:var(--ink);line-height:.92}
-  .mob-leader-team{font-size:13px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:6px;display:flex;align-items:center;gap:5px}
-  .mob-leader-pts{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,9vw,44px);line-height:1;margin-top:6px}
-  .mob-leader-pts span{font-size:16px;color:var(--dim);font-weight:300}
-  .mob-slist{display:flex;flex-direction:column;flex:1;justify-content:center;min-height:0}
-  .mob-srow{display:flex;align-items:center;gap:8px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
+  .mob-ppos{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:13px;color:var(--dim);width:24px;text-align:center}
+  .mob-pname{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(24px,7vw,36px);color:var(--ink);flex:1;line-height:1}
+  .mob-pteam{font-size:12px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:5px;margin-top:3px}
+  .mob-pdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+  .mob-pgap{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:var(--ink);text-align:right;flex-shrink:0}
+  .mob-pgap small{font-size:11px;color:var(--dim);font-weight:300;display:block;text-align:right;margin-top:3px}
+  .mob-rest{font-size:13px;color:var(--dim);font-weight:300;padding:10px 0 4px;line-height:1.7;flex-shrink:0}
+  .mob-race-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(36px,10vw,52px);color:var(--ink);text-align:center;line-height:1;flex-shrink:0}
+  .mob-race-meta{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;text-align:center;margin-top:5px;margin-bottom:14px;flex-shrink:0}
+  .mob-cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}
+  .mob-cd-block{background:var(--surf);border:0.5px solid var(--line2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
+  .mob-cd-n{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(36px,11vw,56px);color:var(--ink);line-height:1}
+  .mob-cd-l{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:6px}
+  .mob-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}
+  .mob-fact{background:var(--surf);border:0.5px solid var(--line2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
+  .mob-fv{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(20px,6vw,30px);color:var(--ink);line-height:1}
+  .mob-fl{font-size:11px;font-weight:300;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin-top:6px}
+  .mob-spacer{flex:0 0 10px}
+  .mob-leader{border-radius:10px;padding:16px;position:relative;flex-shrink:0;margin-bottom:10px}
+  .mob-leader-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(40px,11vw,56px);color:var(--ink);line-height:.92}
+  .mob-leader-team{font-size:14px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:7px;display:flex;align-items:center;gap:5px}
+  .mob-leader-pts{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(36px,10vw,48px);line-height:1;margin-top:7px}
+  .mob-leader-pts span{font-size:18px;color:var(--dim);font-weight:300}
+  .mob-slist{display:flex;flex-direction:column;flex:1;min-height:0}
+  .mob-srow{display:flex;align-items:center;gap:10px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
   .mob-srow:last-child{border:none}
-  .mob-srank{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:12px;color:var(--dim);width:24px;text-align:center}
+  .mob-srank{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:13px;color:var(--dim);width:26px;text-align:center}
   .mob-si{flex:1;min-width:0}
-  .mob-sn{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:var(--ink);line-height:1}
-  .mob-st{font-size:11px;font-weight:300;color:var(--dim);text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:4px}
+  .mob-sn{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(20px,5.5vw,28px);color:var(--ink);line-height:1}
+  .mob-st{font-size:12px;font-weight:300;color:var(--dim);text-transform:uppercase;margin-top:3px;display:flex;align-items:center;gap:4px}
   .mob-sdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-  .mob-str{height:2px;background:var(--line);margin-top:4px;border-radius:1px}
+  .mob-str{height:2px;background:var(--line);margin-top:5px;border-radius:1px}
   .mob-strf{height:100%;border-radius:1px}
-  .mob-sr{text-align:right}
-  .mob-sp{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(20px,5.5vw,28px);color:var(--ink);line-height:1}
-  .mob-sl{font-size:9px;letter-spacing:1.5px;color:var(--dim);font-weight:300}
-  .mob-sg{font-size:11px;color:var(--dim);margin-top:1px}
+  .mob-sr{text-align:right;flex-shrink:0}
+  .mob-sp{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(22px,6vw,30px);color:var(--ink);line-height:1}
+  .mob-sl{font-size:10px;letter-spacing:1.5px;color:var(--dim);font-weight:300}
+  .mob-sg{font-size:12px;color:var(--dim);margin-top:2px}
 }
 </style>
 </head>
@@ -305,29 +318,29 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         </div>
       </div>
     </div></div>
-    <div class="needle-wrap">
+    <div class="needle-wrap" id="nw-pod">
       <div class="needle-bar"></div>
-      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
-      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
-      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
-      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
-      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+      <div class="needle ntext" data-i="0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle ntext" data-i="1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle ntext" data-i="2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle ntext" data-i="3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle ntext" data-i="4">2nd youngest winner in F1 history. The kid didn't blink.</div>
     </div>
-    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname" onclick="this.parentElement.classList.toggle('open')">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- RESULTS -->
   <div id="hist" class="panel">
     <div class="results-zone"><div class="results-wrap"><div class="hist-list" id="hist-list"></div></div></div>
-    <div class="needle-wrap">
+    <div class="needle-wrap" id="nw-hist">
       <div class="needle-bar"></div>
-      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
-      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
-      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
-      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
-      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+      <div class="needle ntext" data-i="0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle ntext" data-i="1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle ntext" data-i="2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle ntext" data-i="3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle ntext" data-i="4">2nd youngest winner in F1 history. The kid didn't blink.</div>
     </div>
-    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname" onclick="this.parentElement.classList.toggle('open')">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- NEXT RACE -->
@@ -356,15 +369,15 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         </div>
       </div>
     </div></div>
-    <div class="needle-wrap">
+    <div class="needle-wrap" id="nw-nr">
       <div class="needle-bar"></div>
-      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
-      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
-      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
-      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
-      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+      <div class="needle ntext" data-i="0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle ntext" data-i="1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle ntext" data-i="2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle ntext" data-i="3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle ntext" data-i="4">2nd youngest winner in F1 history. The kid didn't blink.</div>
     </div>
-    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname" onclick="this.parentElement.classList.toggle('open')">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- DRIVERS -->
@@ -382,15 +395,15 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         <div id="dlist"></div>
       </div>
     </div></div>
-    <div class="needle-wrap">
+    <div class="needle-wrap" id="nw-drv">
       <div class="needle-bar"></div>
-      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
-      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
-      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
-      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
-      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+      <div class="needle ntext" data-i="0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle ntext" data-i="1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle ntext" data-i="2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle ntext" data-i="3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle ntext" data-i="4">2nd youngest winner in F1 history. The kid didn't blink.</div>
     </div>
-    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname" onclick="this.parentElement.classList.toggle('open')">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- CONSTRUCTORS -->
@@ -407,15 +420,15 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         <div id="tlist"></div>
       </div>
     </div></div>
-    <div class="needle-wrap">
+    <div class="needle-wrap" id="nw-ctor">
       <div class="needle-bar"></div>
-      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
-      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
-      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
-      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
-      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+      <div class="needle ntext" data-i="0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle ntext" data-i="1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle ntext" data-i="2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle ntext" data-i="3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle ntext" data-i="4">2nd youngest winner in F1 history. The kid didn't blink.</div>
     </div>
-    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
+    <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname" onclick="this.parentElement.classList.toggle('open')">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
 </div>
@@ -627,22 +640,20 @@ const NEEDLES=[
 
 function buildNeedles(needles){
   const list = needles && needles.length ? needles : NEEDLES;
-  // Update all 5 needle strips (one per panel)
-  ['nd0','nd1','nd2','nd3','nd4'].forEach((id,i)=>{
-    // Update text in all panels since they share same IDs via duplication
-    document.querySelectorAll(`[id="${id}"]`).forEach(el=>{
-      el.textContent = list[i] || list[i % list.length] || '';
-    });
+  // Update text in all needle strips (desktop + mobile)
+  document.querySelectorAll('.ntext').forEach(el=>{
+    const i = parseInt(el.dataset.i);
+    if(!isNaN(i)) el.textContent = list[i] || '';
   });
-  // Start cycling — show first needle immediately
   let cur = 0;
   function showNext(){
-    document.querySelectorAll('.needle').forEach(n=>n.classList.remove('show'));
-    // Show all nd{cur} across all panels
-    document.querySelectorAll(`[id="nd${cur}"]`).forEach(n=>n.classList.add('show'));
+    document.querySelectorAll('.ntext').forEach(el=>{
+      el.classList.toggle('show', parseInt(el.dataset.i) === cur);
+    });
     cur = (cur + 1) % list.length;
   }
-  showNext();
+  // Delay first show slightly to let mobile DOM inject first
+  setTimeout(showNext, 100);
   setInterval(showNext, 7000);
 }
 
@@ -686,8 +697,23 @@ function buildMobilePodium(r){
     </div>
     <div class="mob-rest" id="p-rest">${r.rest||''}</div>`;
   // Insert before ticker
-  const ticker=panel.querySelector('.ticker-wrap');
-  panel.insertBefore(div, ticker);
+  // Insert mob-page before the desktop zone (which is hidden on mobile)
+  const zone=panel.querySelector('.zone,.results-zone');
+  if(zone) panel.insertBefore(div, zone);
+  else panel.prepend(div);
+
+  // Add mob needle+foot after mob-page
+  const existMN=panel.querySelector('.mob-needle-wrap');if(existMN)existMN.remove();
+  const existMF=panel.querySelector('.mob-foot');if(existMF)existMF.remove();
+  const mnf=document.createElement('div');
+  mnf.style.cssText='display:contents';
+  mnf.innerHTML=\`<div class="mob-needle-wrap"><div class="mob-needle-bar"></div><div class="mob-needle-text ntext" data-i="0"></div><div class="mob-needle-text ntext" data-i="1"></div><div class="mob-needle-text ntext" data-i="2"></div><div class="mob-needle-text ntext" data-i="3"></div><div class="mob-needle-text ntext" data-i="4"></div></div><div class="mob-foot" style="position:relative"><div class="mob-ftxt">F1Pit · 2026</div><div style="position:relative"><div class="mob-cname" onclick="toggleBubble(this)">Made by Ashwin K</div><div class="mob-bubble" id="mob-info"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div>\`;
+  // Insert individual children
+  const nwWrap=mnf.querySelector('.mob-needle-wrap');
+  const mfoot=mnf.querySelector('.mob-foot');
+  const desktopNW=panel.querySelector('.needle-wrap');
+  panel.insertBefore(nwWrap, desktopNW);
+  panel.insertBefore(mfoot, desktopNW);
 }
 
 function buildMobileNextRace(next){
@@ -711,8 +737,8 @@ function buildMobileNextRace(next){
     <div class="mob-spacer"></div>
     <div class="mob-label">Circuit facts</div>
     <div class="mob-facts-grid">${factsHtml}</div>`;
-  const ticker=panel.querySelector('.ticker-wrap');
-  panel.insertBefore(div, ticker);
+  const nw=panel.querySelector('.needle-wrap');
+  panel.insertBefore(div, nw);
 }
 
 function buildMobileStandings(panelId, leader, lc, leaderTeamHtml, rows, eggText){
@@ -732,8 +758,8 @@ function buildMobileStandings(panelId, leader, lc, leaderTeamHtml, rows, eggText
       <div class="egg" id="e${panelId}">${eggText}</div>
     </div>
     <div class="mob-slist">${rows}</div>`;
-  const ticker=panel.querySelector('.ticker-wrap');
-  panel.insertBefore(div, ticker);
+  const nw=panel.querySelector('.needle-wrap');
+  panel.insertBefore(div, nw);
 }
 
 function buildMobileDrivers(drivers){
@@ -808,6 +834,11 @@ document.getElementById('logo-tap').addEventListener('click',()=>{ltaps++;clearT
 let kseq=[];
 const kcode=[38,38,40,40,37,39,37,39,66,65];
 document.addEventListener('keydown',e=>{kseq.push(e.keyCode);kseq=kseq.slice(-10);if(kseq.join()===kcode.join())quip('LIGHTS OUT AND AWAY WE GO');});
+
+function toggleBubble(el){
+  const b=document.getElementById('mob-info');
+  if(b)b.classList.toggle('open');
+}
 
 init();
 </script>

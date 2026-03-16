@@ -7,6 +7,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>F1Pit — 2026 Season</title>
 <meta name="description" content="The fastest F1 results tracker. Podium, standings, next race — zero noise.">
+<meta property="og:title" content="F1Pit — 2026 Season">
+<meta property="og:description" content="Podium. Standings. Next race. Zero noise.">
+<meta property="og:image" content="https://f1pit.com/og-image.png">
+<meta property="og:url" content="https://f1pit.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F1Pit — 2026 Season">
+<meta name="twitter:description" content="Podium. Standings. Next race. Zero noise.">
+<meta name="twitter:image" content="https://f1pit.com/og-image.png">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0a'/%3E%3Crect width='32' height='3' rx='0' fill='%23FF1801'/%3E%3Ctext x='4' y='26' font-family='Arial Black,sans-serif' font-weight='900' font-size='22' fill='white'%3EF1%3C/text%3E%3Ctext x='2' y='32' font-family='Arial Black,sans-serif' font-weight='900' font-size='11' fill='%23FF1801' letter-spacing='1'%3EPIT%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230a0a0a'/%3E%3Crect width='180' height='16' rx='0' fill='%23FF1801'/%3E%3Ctext x='18' y='130' font-family='Arial Black,sans-serif' font-weight='900' font-size='116' fill='white'%3EF%3C/text%3E%3Ctext x='80' y='130' font-family='Arial Black,sans-serif' font-weight='900' font-size='116' fill='%23FF1801'%3EP%3C/text%3E%3Ctext x='16' y='170' font-family='Arial,sans-serif' font-weight='300' font-size='22' fill='%23666' letter-spacing='8'%3E1PIT%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -685,7 +694,7 @@ function injectMobNeedleFoot(panel){
   mf.style.position='relative';
   mf.innerHTML='<div class="mob-ftxt">F1Pit · 2026</div>'
     +'<div style="position:relative">'
-    +'<div class="mob-cname" onclick="this.nextElementSibling.classList.toggle(&quot;open&quot;)">Made by Ashwin K</div>'
+    +'<div class="mob-cname" onclick="var b=this.nextElementSibling;b.classList.add(&quot;open&quot;);clearTimeout(window._bt);window._bt=setTimeout(function(){b.classList.remove(&quot;open&quot;)},3000)">Made by Ashwin K</div>'
     +'<div class="mob-bubble"><p>Built by an F1 obsessive.<b>ashwin.keswani1@gmail.com</b></p></div>'
     +'</div>';
   panel.appendChild(nw);

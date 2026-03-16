@@ -491,12 +491,17 @@ async function init(){
     const r=await fetch('races.json?'+Date.now());
     if(r.ok){
       const data=await r.json();
-      if(data.races&&data.races.length) races=data.races;
-      if(data.drivers&&data.drivers.length) drivers=data.drivers;
-      if(data.teams&&data.teams.length) teams=data.teams;
-      if(data.needles&&data.needles.length) needles=data.needles;
+      // Handle both old array format and new object format
+      if(Array.isArray(data)){
+        if(data.length) races=data;
+      } else {
+        if(data.races&&data.races.length) races=data.races;
+        if(data.drivers&&data.drivers.length) drivers=data.drivers;
+        if(data.teams&&data.teams.length) teams=data.teams;
+        if(data.needles&&data.needles.length) needles=data.needles;
+      }
     }
-  }catch(e){}
+  }catch(e){ console.warn('races.json load failed, using seed data',e); }
 
   const latest=races[races.length-1];
   if(latest) renderPodium(latest);
@@ -707,7 +712,7 @@ function buildMobilePodium(r){
   const existMF=panel.querySelector('.mob-foot');if(existMF)existMF.remove();
   const mnf=document.createElement('div');
   mnf.style.cssText='display:contents';
-  mnf.innerHTML=\`<div class="mob-needle-wrap"><div class="mob-needle-bar"></div><div class="mob-needle-text ntext" data-i="0"></div><div class="mob-needle-text ntext" data-i="1"></div><div class="mob-needle-text ntext" data-i="2"></div><div class="mob-needle-text ntext" data-i="3"></div><div class="mob-needle-text ntext" data-i="4"></div></div><div class="mob-foot" style="position:relative"><div class="mob-ftxt">F1Pit · 2026</div><div style="position:relative"><div class="mob-cname" onclick="toggleBubble(this)">Made by Ashwin K</div><div class="mob-bubble" id="mob-info"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div>\`;
+  mnf.innerHTML=`<div class="mob-needle-wrap"><div class="mob-needle-bar"></div><div class="mob-needle-text ntext" data-i="0"></div><div class="mob-needle-text ntext" data-i="1"></div><div class="mob-needle-text ntext" data-i="2"></div><div class="mob-needle-text ntext" data-i="3"></div><div class="mob-needle-text ntext" data-i="4"></div></div><div class="mob-foot" style="position:relative"><div class="mob-ftxt">F1Pit · 2026</div><div style="position:relative"><div class="mob-cname" onclick="toggleBubble(this)">Made by Ashwin K</div><div class="mob-bubble" id="mob-info"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div>`;
   // Insert individual children
   const nwWrap=mnf.querySelector('.mob-needle-wrap');
   const mfoot=mnf.querySelector('.mob-foot');

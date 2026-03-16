@@ -145,19 +145,21 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
 .sl{font-size:11px;letter-spacing:1.5px;color:var(--faint);font-weight:300;transition:color .25s}
 .sg{font-size:13px;color:var(--faint);margin-top:2px;transition:color .25s}
 
-/* TICKER + FOOTER */
-.ticker-wrap{overflow:hidden;height:28px;border-top:0.5px solid var(--line);flex-shrink:0;transition:border-color .25s}
-.ticker-inner{display:flex;width:max-content;animation:tk 28s linear infinite;height:100%;align-items:center}
-@keyframes tk{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.tick{font-size:11px;font-weight:300;color:var(--dim);padding-right:48px;white-space:nowrap;transition:color .25s}
-.tick.hot{color:var(--red)}
+/* NEEDLE STRIP — replaces ticker */
+.needle-wrap{border-top:0.5px solid var(--line);height:44px;flex-shrink:0;position:relative;overflow:hidden;transition:border-color .25s}
+.needle-bar{position:absolute;left:48px;top:50%;transform:translateY(-50%);width:3px;height:18px;background:var(--red);border-radius:1px;flex-shrink:0}
+.needle{position:absolute;left:68px;right:48px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:300;color:var(--ink);line-height:1.4;opacity:0;transition:opacity .8s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.needle.show{opacity:1}
+
+/* FOOTER */
 .foot{border-top:0.5px solid var(--line);flex-shrink:0;transition:border-color .25s}
 .foot-i{width:100%;padding:10px 48px;display:flex;justify-content:space-between;align-items:center}
 .ftxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase;transition:color .25s}
-.cwrap{position:relative}
+/* Fix hover gap so email bubble stays when cursor moves into it */
+.cwrap{position:relative;padding-bottom:14px;margin-bottom:-14px}
 .cname{font-size:11px;font-weight:400;color:var(--dim);cursor:default;user-select:none;transition:color .15s}
 .cwrap:hover .cname{color:var(--red)}
-.cbubble{visibility:hidden;opacity:0;position:absolute;bottom:calc(100% + 10px);right:0;background:var(--surf2);border:0.5px solid var(--line2);border-radius:8px;padding:12px 14px;width:256px;z-index:99;transition:opacity .15s,visibility .15s;pointer-events:none}
+.cbubble{visibility:hidden;opacity:0;position:absolute;bottom:calc(100% + 4px);right:0;background:var(--surf2);border:0.5px solid var(--line2);border-radius:8px;padding:12px 14px;width:256px;z-index:99;transition:opacity .15s,visibility .15s;pointer-events:none}
 .cwrap:hover .cbubble{visibility:visible;opacity:1;pointer-events:auto}
 .cbubble::after{content:'';position:absolute;bottom:-5px;right:14px;width:8px;height:8px;background:var(--surf2);border-right:0.5px solid var(--line2);border-bottom:0.5px solid var(--line2);transform:rotate(45deg)}
 .cbubble p{font-size:11px;color:var(--dim);line-height:1.6;font-weight:300;user-select:text;transition:color .25s}
@@ -170,12 +172,6 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .two-col{gap:48px}
   .nr-body{gap:40px}
 }
-
-/* ═══════════════════════════════════════════
-   MOBILE — purpose-built full-screen layout
-   Each tab fills 100% of available height
-   No awkward gaps anywhere
-═══════════════════════════════════════════ */
 @media(max-width:767px){
   .burger{display:flex}
   .tabs{display:none}
@@ -183,100 +179,67 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .foot-i{padding:8px 16px}
   .ftxt{font-size:10px}
   .cname{font-size:10px}
-  .ticker-wrap{height:24px;flex-shrink:0}
-  .tick{font-size:10px;padding-right:28px}
-
-  /* Shell fills exact viewport — no body scroll ever */
-  .shell{height:100dvh;overflow:hidden}
-
-  /* Every panel is full-height flex column */
-  .panel{overflow:hidden}
-  .panel.on{display:flex;flex-direction:column;flex:1}
-
-  /* ── PODIUM ── */
-  #pod .zone{display:flex;flex-direction:column;align-items:stretch;padding:16px 16px 0;overflow:hidden;flex:1}
-  #pod .wrap{padding:0;display:flex;flex-direction:column;flex:1}
-  #pod .two-col{display:flex;flex-direction:column;flex:1;gap:0}
-  /* Left: hero fills top portion */
-  #pod .two-col > div:first-child{flex:0 0 auto;padding-bottom:12px;cursor:pointer}
-  .hero-eye{font-size:10px;letter-spacing:2px;color:var(--dim);margin-bottom:4px}
-  .hero-num{font-size:clamp(44px,13vw,64px);line-height:.88}
-  .hero-sub{font-size:13px;margin-top:8px;line-height:1.5;color:var(--dim);max-width:100%}
-  .egg{font-size:11px}
-  /* Right: P2/P3 list stretches to fill remaining space */
-  #pod .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .mlist{border-top:0.5px solid var(--line)}
-  .mrow{padding:0;flex:1;display:flex;align-items:center;gap:12px;min-height:0;border-bottom:0.5px solid var(--line)}
-  .mrow:last-child{border:none}
-  .mpos{font-size:12px;width:24px}
-  .mn{font-size:clamp(22px,6vw,32px)}
-  .mteam{font-size:11px;margin-top:2px}
-  .tdot{width:5px;height:5px}
-  .mv{font-size:clamp(16px,4.5vw,22px)}
-  .mv small{font-size:10px;margin-top:2px}
-  .rest{font-size:12px;padding:10px 0 0;line-height:1.7;flex-shrink:0;color:var(--dim)}
-
-  /* ── RESULTS — only scrollable tab ── */
-  #hist .zone{display:flex;flex-direction:column;flex:1;padding:0;overflow:hidden}
+  .ticker-wrap{display:none}
+  .needle-wrap{height:40px;flex-shrink:0}
+  .needle-bar{left:16px;height:14px;width:2.5px}
+  .needle{left:30px;right:16px;font-size:12px}
+  .shell{height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+  .zone,.wrap,.two-col,.nr-body,.nr-header{display:none!important}
+  .panel{overflow:hidden;flex-direction:column}
+  .panel.on{display:flex;flex:1;min-height:0}
+  #hist .zone{display:flex!important;flex-direction:column;flex:1;padding:0;overflow:hidden}
   #hist .results-zone{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .results-wrap{padding:10px 16px}
-  .hist-list{gap:4px}
   .hcard{padding:12px 14px}
   .hgp{font-size:16px}
-  .hdate{font-size:11px;color:var(--dim)}
+  .hdate{font-size:11px}
   .hwinner{font-size:14px}
-  .hrnd{font-size:11px;color:var(--dim)}
-
-  /* ── NEXT RACE ── */
-  #nr .zone{display:flex;flex-direction:column;flex:1;padding:16px 16px 0;overflow:hidden}
-  #nr .wrap{padding:0;display:flex;flex-direction:column;flex:1}
-  .nr-header{text-align:center;flex-shrink:0;margin-bottom:0;padding-bottom:12px}
-  .nr-name{font-size:clamp(28px,8vw,44px);line-height:1}
-  .nr-meta{font-size:11px;letter-spacing:2px;margin-top:4px;color:var(--dim)}
-  /* Body fills remaining space — two sections stack and share height */
-  .nr-body{display:flex;flex-direction:column;flex:1;gap:0}
-  .nr-body > div:first-child{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .nr-body > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .cd-label,.facts-label{font-size:10px;letter-spacing:2px;margin-bottom:8px;color:var(--dim)}
-  /* Countdown 2x2 grid */
-  .cd-blocks{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;flex:1}
-  .cd-block{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
-  .cd-n{font-size:clamp(28px,9vw,44px);line-height:1}
-  .cd-l{font-size:9px;letter-spacing:2px;margin-top:4px;color:var(--dim)}
-  .nr-egg{font-size:12px;margin-top:8px;min-height:16px}
-  /* Facts 2x2 grid */
-  .facts{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;flex:1;margin-bottom:0}
-  .fact{background:var(--surf);border:0.5px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
-  .fv{font-size:clamp(16px,5vw,22px);line-height:1}
-  .fl{font-size:9px;letter-spacing:1.5px;margin-top:4px;color:var(--dim)}
-
-  /* ── DRIVERS ── */
-  #drv .zone{display:flex;flex-direction:column;flex:1;padding:12px 16px 0;overflow:hidden}
-  #drv .wrap{padding:0;display:flex;flex-direction:column;flex:1}
-  #drv .two-col{display:flex;flex-direction:column;flex:1;gap:0}
-  #drv .two-col > div:first-child{flex:0 0 auto}
-  #drv .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .leader-box{padding:14px 16px;margin-bottom:8px}
-  .leader-name{font-size:clamp(34px,10vw,48px);line-height:.92}
-  .leader-team{font-size:13px;margin-top:6px}
-  .leader-pts{font-size:clamp(30px,9vw,42px);margin-top:6px}
-  .leader-pts span{font-size:16px}
-  .sitem{padding:0;flex:1;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--line);min-height:0}
-  .sitem:last-child{border:none}
-  .srank{font-size:12px;width:24px;color:var(--dim)}
-  .sn{font-size:clamp(18px,5vw,26px);line-height:1}
-  .st{font-size:11px;margin-top:2px;color:var(--dim)}
-  .str{margin-top:4px;height:2px}
-  .sp{font-size:clamp(20px,5.5vw,28px)}
-  .sl{font-size:10px;color:var(--dim)}
-  .sg{font-size:11px;color:var(--dim)}
-
-  /* ── CONSTRUCTORS ── */
-  #ctor .zone{display:flex;flex-direction:column;flex:1;padding:12px 16px 0;overflow:hidden}
-  #ctor .wrap{padding:0;display:flex;flex-direction:column;flex:1}
-  #ctor .two-col{display:flex;flex-direction:column;flex:1;gap:0}
-  #ctor .two-col > div:first-child{flex:0 0 auto}
-  #ctor .two-col > div:last-child{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .hrnd{font-size:11px}
+  .mob-page{display:flex;flex-direction:column;flex:1;padding:14px 16px 0;overflow:hidden;min-height:0}
+  .mob-label{font-size:10px;font-weight:300;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;flex-shrink:0}
+  .mob-winner-eye{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
+  .mob-winner-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(52px,15vw,72px);line-height:.88}
+  .mob-winner-note{font-size:13px;font-weight:300;color:var(--dim);margin-top:8px;line-height:1.5}
+  .mob-p23{display:flex;flex-direction:column;flex:1;justify-content:center;border-top:0.5px solid var(--line);margin-top:10px;min-height:0}
+  .mob-prow{display:flex;align-items:center;gap:10px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
+  .mob-prow:last-child{border:none}
+  .mob-ppos{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:12px;color:var(--dim);width:22px;text-align:center}
+  .mob-pname{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(22px,6vw,30px);color:var(--ink);flex:1;line-height:1}
+  .mob-pteam{font-size:11px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:4px;margin-top:2px}
+  .mob-pdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+  .mob-pgap{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(16px,4.5vw,22px);color:var(--ink);text-align:right}
+  .mob-pgap small{font-size:10px;color:var(--dim);font-weight:300;display:block;text-align:right;margin-top:2px}
+  .mob-rest{font-size:12px;color:var(--dim);font-weight:300;padding:10px 0;line-height:1.7;flex-shrink:0}
+  .mob-race-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,9vw,48px);color:var(--ink);text-align:center;line-height:1;flex-shrink:0}
+  .mob-race-meta{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;text-align:center;margin-top:4px;margin-bottom:10px;flex-shrink:0}
+  .mob-cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-height:0}
+  .mob-cd-block{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .mob-cd-n{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,10vw,52px);color:var(--ink);line-height:1}
+  .mob-cd-l{font-size:10px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:5px}
+  .mob-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1;min-height:0}
+  .mob-fact{background:var(--surf);border:0.5px solid var(--line2);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .mob-fv{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:var(--ink);line-height:1}
+  .mob-fl{font-size:10px;font-weight:300;letter-spacing:1.5px;color:var(--dim);text-transform:uppercase;margin-top:5px}
+  .mob-spacer{flex:0 0 8px}
+  .mob-leader{border-radius:8px;padding:14px 16px;position:relative;flex-shrink:0;margin-bottom:8px}
+  .mob-leader-name{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(36px,10vw,52px);color:var(--ink);line-height:.92}
+  .mob-leader-team{font-size:13px;font-weight:300;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-top:6px;display:flex;align-items:center;gap:5px}
+  .mob-leader-pts{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(32px,9vw,44px);line-height:1;margin-top:6px}
+  .mob-leader-pts span{font-size:16px;color:var(--dim);font-weight:300}
+  .mob-slist{display:flex;flex-direction:column;flex:1;justify-content:center;min-height:0}
+  .mob-srow{display:flex;align-items:center;gap:8px;flex:1;border-bottom:0.5px solid var(--line);min-height:0}
+  .mob-srow:last-child{border:none}
+  .mob-srank{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:12px;color:var(--dim);width:24px;text-align:center}
+  .mob-si{flex:1;min-width:0}
+  .mob-sn{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:var(--ink);line-height:1}
+  .mob-st{font-size:11px;font-weight:300;color:var(--dim);text-transform:uppercase;margin-top:2px;display:flex;align-items:center;gap:4px}
+  .mob-sdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+  .mob-str{height:2px;background:var(--line);margin-top:4px;border-radius:1px}
+  .mob-strf{height:100%;border-radius:1px}
+  .mob-sr{text-align:right}
+  .mob-sp{font-family:"Saira Condensed",sans-serif;font-weight:800;font-size:clamp(20px,5.5vw,28px);color:var(--ink);line-height:1}
+  .mob-sl{font-size:9px;letter-spacing:1.5px;color:var(--dim);font-weight:300}
+  .mob-sg{font-size:11px;color:var(--dim);margin-top:1px}
 }
 </style>
 </head>
@@ -342,14 +305,28 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         </div>
       </div>
     </div></div>
-    <div class="ticker-wrap"><div class="ticker-inner" id="tk1"></div></div>
+    <div class="needle-wrap">
+      <div class="needle-bar"></div>
+      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+    </div>
     <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
   <!-- RESULTS -->
   <div id="hist" class="panel">
     <div class="results-zone"><div class="results-wrap"><div class="hist-list" id="hist-list"></div></div></div>
-    <div class="ticker-wrap"><div class="ticker-inner" id="tk2"></div></div>
+    <div class="needle-wrap">
+      <div class="needle-bar"></div>
+      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+    </div>
     <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
@@ -379,7 +356,14 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         </div>
       </div>
     </div></div>
-    <div class="ticker-wrap"><div class="ticker-inner" id="tk3"></div></div>
+    <div class="needle-wrap">
+      <div class="needle-bar"></div>
+      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+    </div>
     <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
@@ -398,7 +382,14 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         <div id="dlist"></div>
       </div>
     </div></div>
-    <div class="ticker-wrap"><div class="ticker-inner" id="tk4"></div></div>
+    <div class="needle-wrap">
+      <div class="needle-bar"></div>
+      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+    </div>
     <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
@@ -416,7 +407,14 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
         <div id="tlist"></div>
       </div>
     </div></div>
-    <div class="ticker-wrap"><div class="ticker-inner" id="tk5"></div></div>
+    <div class="needle-wrap">
+      <div class="needle-bar"></div>
+      <div class="needle" id="nd0">Hamilton waited 26 races for a Ferrari podium.</div>
+      <div class="needle" id="nd1">Verstappen — P8. Zero podiums. Red Bull adrift.</div>
+      <div class="needle" id="nd2">McLaren double DNF in China. Defending champions.</div>
+      <div class="needle" id="nd3">Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.</div>
+      <div class="needle" id="nd4">2nd youngest winner in F1 history. The kid didn't blink.</div>
+    </div>
     <div class="foot"><div class="foot-i"><div class="ftxt">F1Pit · 2026</div><div class="cwrap"><div class="cname">Made by Ashwin K</div><div class="cbubble"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div></div>
   </div>
 
@@ -465,19 +463,17 @@ const SEED_RACES=[
 const SEED_DRIVERS=[{name:'Russell',team:'Mercedes',points:51},{name:'Antonelli',team:'Mercedes',points:47},{name:'Leclerc',team:'Ferrari',points:34},{name:'Hamilton',team:'Ferrari',points:33},{name:'Bearman',team:'Haas',points:17}];
 const SEED_TEAMS=[{name:'Mercedes',points:98},{name:'Ferrari',points:67},{name:'McLaren',points:18},{name:'Haas',points:17},{name:'Alpine',points:9}];
 
-const TICKS=[
-  {t:'Verstappen — P8. Zero podiums. Red Bull adrift.',hot:false},
-  {t:'Hamilton waited 26 races for a Ferrari podium.',hot:true},
-  {t:'McLaren double DNF in China. Defending champions.',hot:true},
-  {t:'Antonelli: 2nd youngest race winner ever.',hot:false},
-  {t:'Mercedes lead both championships after 2 rounds.',hot:false},
-  {t:'Suzuka next. 130R flat. If you dare.',hot:true},
-  {t:'Russell won from pole in both races so far.',hot:false},
+const NEEDLES_SEED=[
+  'Hamilton waited 26 races for a Ferrari podium.',
+  'Verstappen — P8. Zero podiums. Red Bull adrift.',
+  'McLaren double DNF in China. Defending champions.',
+  'Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.',
+  '2nd youngest winner in F1 history. The kid didn\'t blink.',
 ];
 
 // ── INIT ─────────────────────────────────────────────────────
 async function init(){
-  let races=SEED_RACES, drivers=SEED_DRIVERS, teams=SEED_TEAMS;
+  let races=SEED_RACES, drivers=SEED_DRIVERS, teams=SEED_TEAMS, needles=NEEDLES_SEED;
   try{
     const r=await fetch('races.json?'+Date.now());
     if(r.ok){
@@ -485,6 +481,7 @@ async function init(){
       if(data.races&&data.races.length) races=data.races;
       if(data.drivers&&data.drivers.length) drivers=data.drivers;
       if(data.teams&&data.teams.length) teams=data.teams;
+      if(data.needles&&data.needles.length) needles=data.needles;
     }
   }catch(e){}
 
@@ -494,7 +491,17 @@ async function init(){
   renderNextRace();
   renderDrivers(drivers);
   renderTeams(teams);
-  buildTickers();
+  buildNeedles(needles);
+
+  // Build mobile-specific layouts
+  if(isMobile()){
+    if(latest) buildMobilePodium(latest);
+    const now=new Date();
+    const next=ALL_RACES.find(r=>r.utc&&new Date(r.utc)>now)||ALL_RACES[ALL_RACES.length-1];
+    buildMobileNextRace(next);
+    buildMobileDrivers(drivers);
+    buildMobileTeams(teams);
+  }
 
   const lastRound=latest?(latest.round||latest.r||races.length):races.length;
   document.getElementById('rbadge').textContent=`Race ${lastRound} of 24`;
@@ -562,7 +569,10 @@ function renderNextRace(){
   function tick(){
     const d=rt-new Date();if(d<=0){renderNextRace();return;}
     const v=[Math.floor(d/864e5),Math.floor(d%864e5/36e5),Math.floor(d%36e5/6e4),Math.floor(d%6e4/1e3)];
-    ['cd-d','cd-h','cd-m','cd-s'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=String(v[i]).padStart(2,'0');});
+    ['cd-d','cd-h','cd-m','cd-s'].forEach((id,i)=>{
+      const el=document.getElementById(id);
+      if(el)el.textContent=String(v[i]).padStart(2,'0');
+    });
   }
   tick();window._cdTimer=setInterval(tick,1000);
 }
@@ -606,10 +616,156 @@ function renderTeams(teams){
     <div class="sr"><div class="sp">${x.points}</div><div class="sl">PTS</div><div class="sg">–${leader.points-x.points}</div></div></div>`).join('');
 }
 
-// ── TICKERS ──────────────────────────────────────────────────
-function buildTickers(){
-  const th=TICKS.map(x=>`<span class="tick${x.hot?' hot':''}">${x.t}</span>`).join('');
-  ['tk1','tk2','tk3','tk4','tk5'].forEach(id=>{document.getElementById(id).innerHTML=th+th;});
+// ── NEEDLES — replaces ticker ─────────────────────────────────
+const NEEDLES=[
+  'Hamilton waited 26 races for a Ferrari podium.',
+  'Verstappen — P8. Zero podiums. Red Bull adrift.',
+  'McLaren double DNF in China. Defending champions.',
+  'Russell and Antonelli. Same team. 4 points apart. This gets ugly by Monaco.',
+  '2nd youngest winner in F1 history. The kid didn\'t blink.',
+];
+
+function buildNeedles(needles){
+  const list = needles && needles.length ? needles : NEEDLES;
+  // Update all 5 needle strips (one per panel)
+  ['nd0','nd1','nd2','nd3','nd4'].forEach((id,i)=>{
+    // Update text in all panels since they share same IDs via duplication
+    document.querySelectorAll(`[id="${id}"]`).forEach(el=>{
+      el.textContent = list[i] || list[i % list.length] || '';
+    });
+  });
+  // Start cycling — show first needle immediately
+  let cur = 0;
+  function showNext(){
+    document.querySelectorAll('.needle').forEach(n=>n.classList.remove('show'));
+    // Show all nd{cur} across all panels
+    document.querySelectorAll(`[id="nd${cur}"]`).forEach(n=>n.classList.add('show'));
+    cur = (cur + 1) % list.length;
+  }
+  showNext();
+  setInterval(showNext, 7000);
+}
+
+// ── MOBILE HTML INJECTION ─────────────────────────────────────
+function isMobile(){return window.innerWidth<=767;}
+
+function buildMobilePodium(r){
+  if(!r)return;
+  const wc=r.p1c||TC[r.p1.team]||'#FF1801';
+  const p2n=r.p2.name||r.p2, p2t=r.p2.team||r.p2t||'', p2d=r.p2.delta||r.p2d||'';
+  const p3n=r.p3.name||r.p3, p3t=r.p3.team||r.p3t||'', p3d=r.p3.delta||r.p3d||'';
+  const panel=document.getElementById('pod');
+  // Remove existing mob-page if any
+  const ex=panel.querySelector('.mob-page');if(ex)ex.remove();
+  const div=document.createElement('div');
+  div.className='mob-page';
+  div.innerHTML=`
+    <div style="flex-shrink:0;cursor:pointer" onclick="egg('ew')">
+      <div class="mob-winner-eye" id="p-eye">${r.name} · Race ${r.round||r.r} · Winner</div>
+      <div class="mob-winner-name" style="color:${wc}" id="p-win">${r.p1.name||r.p1}</div>
+      <div class="mob-winner-note" id="p-sub">${r.note||''}</div>
+      <div class="egg" id="ew">${r.egg||''}</div>
+    </div>
+    <div class="mob-p23">
+      <div class="mob-prow">
+        <div class="mob-ppos">P2</div>
+        <div style="flex:1">
+          <div class="mob-pname" id="p2n">${p2n}</div>
+          <div class="mob-pteam"><span class="mob-pdot" style="background:${TC[p2t]||'#888'}"></span><span id="p2t">${p2t}</span></div>
+        </div>
+        <div class="mob-pgap" id="p2v">${p2d}<small>P2</small></div>
+      </div>
+      <div class="mob-prow">
+        <div class="mob-ppos">P3</div>
+        <div style="flex:1">
+          <div class="mob-pname" id="p3n">${p3n}</div>
+          <div class="mob-pteam"><span class="mob-pdot" style="background:${TC[p3t]||'#888'}"></span><span id="p3t">${p3t}</span></div>
+        </div>
+        <div class="mob-pgap" id="p3v">${p3d}<small>P3</small></div>
+      </div>
+    </div>
+    <div class="mob-rest" id="p-rest">${r.rest||''}</div>`;
+  // Insert before ticker
+  const ticker=panel.querySelector('.ticker-wrap');
+  panel.insertBefore(div, ticker);
+}
+
+function buildMobileNextRace(next){
+  if(!next)return;
+  const panel=document.getElementById('nr');
+  const ex=panel.querySelector('.mob-page');if(ex)ex.remove();
+  const factsHtml=(next.facts||[]).map(f=>`
+    <div class="mob-fact"><div class="mob-fv">${f.v}</div><div class="mob-fl">${f.l}</div></div>`).join('');
+  const div=document.createElement('div');
+  div.className='mob-page';
+  div.innerHTML=`
+    <div class="mob-race-name" id="nr-name">${next.name}</div>
+    <div class="mob-race-meta" id="nr-meta">${next.circuit} · ${next.date}</div>
+    <div class="mob-label">Countdown</div>
+    <div class="mob-cd-grid">
+      <div class="mob-cd-block"><div class="mob-cd-n" id="cd-d">--</div><div class="mob-cd-l">Days</div></div>
+      <div class="mob-cd-block"><div class="mob-cd-n" id="cd-h">--</div><div class="mob-cd-l">Hrs</div></div>
+      <div class="mob-cd-block"><div class="mob-cd-n" id="cd-m">--</div><div class="mob-cd-l">Min</div></div>
+      <div class="mob-cd-block"><div class="mob-cd-n" id="cd-s">--</div><div class="mob-cd-l">Sec</div></div>
+    </div>
+    <div class="mob-spacer"></div>
+    <div class="mob-label">Circuit facts</div>
+    <div class="mob-facts-grid">${factsHtml}</div>`;
+  const ticker=panel.querySelector('.ticker-wrap');
+  panel.insertBefore(div, ticker);
+}
+
+function buildMobileStandings(panelId, leader, lc, leaderTeamHtml, rows, eggText){
+  const panel=document.getElementById(panelId);
+  const ex=panel.querySelector('.mob-page');if(ex)ex.remove();
+  const styleId=panelId+'-mob-style';
+  let st=document.getElementById(styleId);
+  if(!st){st=document.createElement('style');st.id=styleId;document.head.appendChild(st);}
+  st.textContent=`#${panelId} .mob-leader::before{content:'LEADER';font-family:'Saira Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:3px;color:${lc};position:absolute;top:0;left:14px;background:var(--bg);padding:0 6px;transform:translateY(-50%);transition:background .25s}`;
+  const div=document.createElement('div');
+  div.className='mob-page';
+  div.innerHTML=`
+    <div class="mob-leader" style="border:1.5px solid ${lc}" onclick="egg('e${panelId}')">
+      <div class="mob-leader-name">${leader.name||leader}</div>
+      ${leaderTeamHtml}
+      <div class="mob-leader-pts"><span style="color:${lc}">${leader.points}</span> <span>pts</span></div>
+      <div class="egg" id="e${panelId}">${eggText}</div>
+    </div>
+    <div class="mob-slist">${rows}</div>`;
+  const ticker=panel.querySelector('.ticker-wrap');
+  panel.insertBefore(div, ticker);
+}
+
+function buildMobileDrivers(drivers){
+  const leader=drivers[0];
+  const lc=TC[leader.team]||'#FF1801';
+  const teamHtml=`<div class="mob-leader-team"><span class="mob-sdot" style="background:${lc}"></span>${leader.team}</div>`;
+  const rows=drivers.slice(1).map((x,i)=>`
+    <div class="mob-srow">
+      <div class="mob-srank">${String(i+2).padStart(2,'0')}</div>
+      <div class="mob-si">
+        <div class="mob-sn">${x.name}</div>
+        <div class="mob-st"><span class="mob-sdot" style="background:${TC[x.team]||'#888'}"></span>${x.team}</div>
+        <div class="mob-str"><div class="mob-strf" style="width:${Math.round(x.points/leader.points*100)}%;background:${TC[x.team]||'#888'}"></div></div>
+      </div>
+      <div class="mob-sr"><div class="mob-sp">${x.points}</div><div class="mob-sl">PTS</div><div class="mob-sg">–${leader.points-x.points}</div></div>
+    </div>`).join('');
+  buildMobileStandings('drv',leader,lc,teamHtml,rows,'Beating your teammate is the first war.');
+}
+
+function buildMobileTeams(teams){
+  const leader=teams[0];
+  const lc=TC[leader.name]||'#FF1801';
+  const rows=teams.slice(1).map((x,i)=>`
+    <div class="mob-srow">
+      <div class="mob-srank">${String(i+2).padStart(2,'0')}</div>
+      <div class="mob-si">
+        <div class="mob-sn">${x.name}</div>
+        <div class="mob-str"><div class="mob-strf" style="width:${Math.round(x.points/leader.points*100)}%;background:${TC[x.name]||'#888'}"></div></div>
+      </div>
+      <div class="mob-sr"><div class="mob-sp">${x.points}</div><div class="mob-sl">PTS</div><div class="mob-sg">–${leader.points-x.points}</div></div>
+    </div>`).join('');
+  buildMobileStandings('ctor',leader,lc,'',rows,'The Silver Arrows are back. And they brought both drivers.');
 }
 
 // ── UI ───────────────────────────────────────────────────────

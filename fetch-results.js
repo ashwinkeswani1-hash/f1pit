@@ -151,7 +151,38 @@ Return ONLY valid JSON, no preamble, no markdown:
   }
 }
 
-async function main() {
+async function generateNeedles(raceName, p1, p2, p3, rest, driverStandings, teamStandings) {
+  if (!GROQ_API_KEY) return null;
+  const dTop = driverStandings ? driverStandings.slice(0,3).map(d=>`${d.name} ${d.points}pts`).join(', ') : '';
+  const tTop = teamStandings ? teamStandings.slice(0,3).map(t=>`${t.name} ${t.points}pts`).join(', ') : '';
+  const prompt = `You are a sharp, brutally honest F1 journalist known for uncomfortable truths.
+
+Race: ${raceName}
+Winner: ${p1.name} (${p1.team})
+P2: ${p2.name} P3: ${p3.name}
+Rest: ${rest}
+Driver standings: ${dTop}
+Constructor standings: ${tTop}
+
+Write exactly 5 needle lines — short, spicy, uncomfortable truths about this race or season.
+Each must be a story, not a fact. Make it sting. Think "Hamilton waited 26 races for a Ferrari podium" not "Hamilton finished 3rd".
+No fluff. No emoji. Max 12 words each.
+
+Return ONLY a JSON array of 5 strings, no preamble, no markdown:
+["needle1","needle2","needle3","needle4","needle5"]`;
+  try {
+    const res = await post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      { model:'llama-3.3-70b-versatile', messages:[{role:'user',content:prompt}], max_tokens:300, temperature:0.9 },
+      { Authorization:`Bearer ${GROQ_API_KEY}` }
+    );
+    const text = res.choices[0].message.content.trim().replace(/```json|```/g,'');
+    return JSON.parse(text);
+  } catch(e) {
+    console.error('Needles error:', e.message);
+    return null;
+  }
+}
   console.log('F1Pit autopilot update starting...');
 
   // Load existing data
@@ -201,10 +232,14 @@ async function main() {
     getTeamStandings(session.session_key),
   ]);
 
+  // Generate needles
+  const needles = await generateNeedles(calRace.name, result.p1, result.p2, result.p3, result.rest, driverStandings, teamStandings);
+
   const output = {
     races,
     drivers: driverStandings || existing.drivers || [],
-    teams: teamStandings || existing.teams || []
+    teams: teamStandings || existing.teams || [],
+    needles: needles || existing.needles || []
   };
 
   fs.writeFileSync('races.json', JSON.stringify(output, null, 2));

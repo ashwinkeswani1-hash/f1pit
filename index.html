@@ -147,9 +147,9 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
 
 /* NEEDLE STRIP — replaces ticker */
 .needle-wrap{border-top:0.5px solid var(--line);height:44px;flex-shrink:0;position:relative;overflow:hidden;transition:border-color .25s}
-.needle-bar{position:absolute;left:48px;top:50%;transform:translateY(-50%);width:3px;height:18px;background:var(--red);border-radius:1px;flex-shrink:0}
-.needle{position:absolute;left:68px;right:48px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:300;color:var(--ink);line-height:1.4;opacity:0;transition:opacity .8s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.needle.show{opacity:1}
+.needle-bar{position:absolute;left:48px;top:50%;transform:translateY(-50%);width:3px;height:18px;background:var(--red);border-radius:1px}
+.needle{position:absolute;left:68px;right:48px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:300;color:var(--ink);line-height:1.4;opacity:0;transition:opacity .8s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
+.needle.show{opacity:1;display:block}
 
 /* FOOTER */
 .foot{border-top:0.5px solid var(--line);flex-shrink:0;transition:border-color .25s}
@@ -181,15 +181,12 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .cname{font-size:10px}
   .needle-wrap{display:none!important}
   .foot{display:none!important}
-  .needle-wrap{height:40px;flex-shrink:0}
-  .needle-bar{left:16px;height:14px;width:2.5px}
-  .needle{left:30px;right:16px;font-size:12px}
   .shell{height:100dvh;overflow:hidden;display:flex;flex-direction:column}
   /* mob-needle and mob-foot shown instead */
-  .mob-needle-wrap{border-top:0.5px solid var(--line);height:40px;flex-shrink:0;position:relative;overflow:hidden;display:flex;align-items:center;padding:0 16px;gap:10px}
-  .mob-needle-bar{width:2.5px;height:14px;background:var(--red);border-radius:1px;flex-shrink:0}
-  .mob-needle-text{font-size:12px;font-weight:300;color:var(--ink);line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0;transition:opacity .8s ease;position:absolute;left:30px;right:16px}
-  .mob-needle-text.show{opacity:1}
+  .mob-needle-wrap{border-top:0.5px solid var(--line);height:40px;flex-shrink:0;display:flex;align-items:center;padding:0 16px;gap:10px;overflow:hidden}
+  .mob-needle-bar{width:2.5px;height:16px;background:var(--red);border-radius:1px;flex-shrink:0}
+  .mob-needle-text{font-size:13px;font-weight:300;color:var(--ink);line-height:1.4;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:0;transition:opacity .8s ease;display:none}
+  .mob-needle-text.show{opacity:1;display:block}
   .mob-foot{border-top:0.5px solid var(--line);height:34px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;flex-shrink:0}
   .mob-ftxt{font-size:10px;font-weight:300;letter-spacing:1px;color:var(--faint);text-transform:uppercase}
   .mob-cname{font-size:11px;font-weight:400;color:var(--dim);cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -202,12 +199,17 @@ html,body{background:var(--bg);font-family:'Saira',sans-serif;overflow:hidden;he
   .panel.on{display:flex;flex:1;min-height:0}
   #hist .zone{display:flex!important;flex-direction:column;flex:1;padding:0;overflow:hidden}
   #hist .results-zone{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .results-wrap{padding:10px 16px}
-  .hcard{padding:12px 14px}
-  .hgp{font-size:16px}
-  .hdate{font-size:11px}
-  .hwinner{font-size:14px}
-  .hrnd{font-size:11px}
+  .results-wrap{padding:12px 16px}
+  .hist-list{gap:6px}
+  .hcard{padding:16px 16px}
+  .hgp{font-size:clamp(18px,5vw,24px)}
+  .hdate{font-size:13px}
+  .hwinner{font-size:clamp(16px,4.5vw,20px)}
+  .hrnd{font-size:13px}
+  .hpod{gap:20px}
+  .hp b{font-size:16px}
+  .hrest{font-size:13px}
+  .hnote{font-size:13px}
   .mob-page{display:flex;flex-direction:column;flex:1;padding:16px 16px 0;overflow:hidden;min-height:0}
   .mob-label{font-size:10px;font-weight:300;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px;flex-shrink:0}
   .mob-winner-eye{font-size:11px;font-weight:300;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;flex-shrink:0}
@@ -509,9 +511,8 @@ async function init(){
   renderNextRace();
   renderDrivers(drivers);
   renderTeams(teams);
-  buildNeedles(needles);
 
-  // Build mobile-specific layouts
+  // Build mobile layouts first so needle elements exist before buildNeedles runs
   if(isMobile()){
     if(latest) buildMobilePodium(latest);
     const now=new Date();
@@ -520,6 +521,9 @@ async function init(){
     buildMobileDrivers(drivers);
     buildMobileTeams(teams);
   }
+
+  // Now populate needles — all needle elements (desktop + mobile) exist at this point
+  buildNeedles(needles);
 
   const lastRound=latest?(latest.round||latest.r||races.length):races.length;
   document.getElementById('rbadge').textContent=`Race ${lastRound} of 24`;
@@ -665,6 +669,29 @@ function buildNeedles(needles){
 // ── MOBILE HTML INJECTION ─────────────────────────────────────
 function isMobile(){return window.innerWidth<=767;}
 
+function injectMobNeedleFoot(panel){
+  const existN=panel.querySelector('.mob-needle-wrap');if(existN)existN.remove();
+  const existF=panel.querySelector('.mob-foot');if(existF)existF.remove();
+  const nw=document.createElement('div');
+  nw.className='mob-needle-wrap';
+  nw.innerHTML='<div class="mob-needle-bar"></div>'
+    +'<div class="mob-needle-text ntext" data-i="0"></div>'
+    +'<div class="mob-needle-text ntext" data-i="1"></div>'
+    +'<div class="mob-needle-text ntext" data-i="2"></div>'
+    +'<div class="mob-needle-text ntext" data-i="3"></div>'
+    +'<div class="mob-needle-text ntext" data-i="4"></div>';
+  const mf=document.createElement('div');
+  mf.className='mob-foot';
+  mf.style.position='relative';
+  mf.innerHTML='<div class="mob-ftxt">F1Pit · 2026</div>'
+    +'<div style="position:relative">'
+    +'<div class="mob-cname" onclick="this.nextElementSibling.classList.toggle(&quot;open&quot;)">Made by Ashwin K</div>'
+    +'<div class="mob-bubble"><p>Built by an F1 obsessive.<b>ashwin.keswani1@gmail.com</b></p></div>'
+    +'</div>';
+  panel.appendChild(nw);
+  panel.appendChild(mf);
+}
+
 function buildMobilePodium(r){
   if(!r)return;
   const wc=r.p1c||TC[r.p1.team]||'#FF1801';
@@ -701,24 +728,8 @@ function buildMobilePodium(r){
       </div>
     </div>
     <div class="mob-rest" id="p-rest">${r.rest||''}</div>`;
-  // Insert before ticker
-  // Insert mob-page before the desktop zone (which is hidden on mobile)
-  const zone=panel.querySelector('.zone,.results-zone');
-  if(zone) panel.insertBefore(div, zone);
-  else panel.prepend(div);
-
-  // Add mob needle+foot after mob-page
-  const existMN=panel.querySelector('.mob-needle-wrap');if(existMN)existMN.remove();
-  const existMF=panel.querySelector('.mob-foot');if(existMF)existMF.remove();
-  const mnf=document.createElement('div');
-  mnf.style.cssText='display:contents';
-  mnf.innerHTML=`<div class="mob-needle-wrap"><div class="mob-needle-bar"></div><div class="mob-needle-text ntext" data-i="0"></div><div class="mob-needle-text ntext" data-i="1"></div><div class="mob-needle-text ntext" data-i="2"></div><div class="mob-needle-text ntext" data-i="3"></div><div class="mob-needle-text ntext" data-i="4"></div></div><div class="mob-foot" style="position:relative"><div class="mob-ftxt">F1Pit · 2026</div><div style="position:relative"><div class="mob-cname" onclick="toggleBubble(this)">Made by Ashwin K</div><div class="mob-bubble" id="mob-info"><p>Built by an F1 obsessive who wanted a cleaner way to follow the season.<b>ashwin.keswani1@gmail.com</b></p></div></div></div>`;
-  // Insert individual children
-  const nwWrap=mnf.querySelector('.mob-needle-wrap');
-  const mfoot=mnf.querySelector('.mob-foot');
-  const desktopNW=panel.querySelector('.needle-wrap');
-  panel.insertBefore(nwWrap, desktopNW);
-  panel.insertBefore(mfoot, desktopNW);
+  panel.prepend(div);
+  injectMobNeedleFoot(panel);
 }
 
 function buildMobileNextRace(next){
@@ -742,8 +753,16 @@ function buildMobileNextRace(next){
     <div class="mob-spacer"></div>
     <div class="mob-label">Circuit facts</div>
     <div class="mob-facts-grid">${factsHtml}</div>`;
-  const nw=panel.querySelector('.needle-wrap');
-  panel.insertBefore(div, nw);
+  panel.prepend(div);
+  injectMobNeedleFoot(panel);
+  if(window._cdTimer)clearInterval(window._cdTimer);
+  const rt=new Date(next.utc||'2099-01-01');
+  function mobileTick(){
+    const d=rt-new Date();if(d<=0)return;
+    const v=[Math.floor(d/864e5),Math.floor(d%864e5/36e5),Math.floor(d%36e5/6e4),Math.floor(d%6e4/1e3)];
+    ['cd-d','cd-h','cd-m','cd-s'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=String(v[i]).padStart(2,'0');});
+  }
+  mobileTick();window._cdTimer=setInterval(mobileTick,1000);
 }
 
 function buildMobileStandings(panelId, leader, lc, leaderTeamHtml, rows, eggText){
@@ -763,8 +782,8 @@ function buildMobileStandings(panelId, leader, lc, leaderTeamHtml, rows, eggText
       <div class="egg" id="e${panelId}">${eggText}</div>
     </div>
     <div class="mob-slist">${rows}</div>`;
-  const nw=panel.querySelector('.needle-wrap');
-  panel.insertBefore(div, nw);
+  panel.prepend(div);
+  injectMobNeedleFoot(panel);
 }
 
 function buildMobileDrivers(drivers){
